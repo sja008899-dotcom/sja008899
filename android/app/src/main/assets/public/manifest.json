@@ -1,0 +1,55 @@
+{
+  "name": "گل آریس | بازار آنلاین گل، گیاه و صنایع دستی",
+  "short_name": "گل آریس",
+  "description": "بازار آنلاین خرید مستقیم گل تازه، گیاهان آپارتمانی و صنایع دستی اصیل ایرانی با ارسال فوری و بسته‌بندی هدیه",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FCFCFA",
+  "theme_color": "#1F3F1B",
+  "dir": "rtl",
+  "lang": "fa-IR",
+  "categories": ["shopping", "lifestyle", "nature"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "بازارچه گل و گیاه",
+      "short_name": "بازارچه",
+      "description": "مشاهده و خرید آنلاین گل‌های طبیعی و گیاهان آپارتمانی",
+      "url": "/?tab=marketplace",
+      "icons": [{ "src": "/logo-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "صنایع دستی و گلدان",
+      "short_name": "صنایع دستی",
+      "description": "گلدان‌های سرامیکی لالجین و دست‌سازه‌های هنری",
+      "url": "/?tab=handicrafts",
+      "icons": [{ "src": "/logo-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "ثبت نام فروشنده",
+      "short_name": "فروشندگان",
+      "description": "افتتاح غرفه گلفروشی و صنایع دستی",
+      "url": "/?tab=sellers",
+      "icons": [{ "src": "/logo-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

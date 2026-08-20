@@ -1,0 +1,24 @@
+# Robots.txt for Golarys (گل آریس)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://golarys.ir/sitemap.xml
+Sitemap: https://golarys.com/sitemap.xml
+
+# Crawl-delay for optimal indexing
+Crawl-delay: 1
+
+# Googlebot & Search Engine Specific Rules
+User-agent: Googlebot
+Allow: /
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.svg$
+
+User-agent: Googlebot-Image
+Allow: /

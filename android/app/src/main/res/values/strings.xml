@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Golarys</string>
+    <string name="title_activity_main">Golarys</string>
+    <string name="package_name">ir.golarys.app</string>
+    <string name="custom_url_scheme">ir.golarys.app</string>
+</resources>

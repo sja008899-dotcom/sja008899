@@ -20,7 +20,6 @@ import { GiftMessageModal } from './components/GiftMessageModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { CheckoutModal } from './components/CheckoutModal';
-import { ShaparakGatewayModal } from './components/ShaparakGatewayModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { NotificationsDrawer } from './components/NotificationsDrawer';
 import { ToastContainer } from './components/ToastContainer';
@@ -63,7 +62,6 @@ const ModalsContainer: React.FC = () => {
       <CartDrawer />
       <AuthModal />
       <CheckoutModal />
-      <ShaparakGatewayModal />
       <OrderTrackingModal />
       <NotificationsDrawer />
       <ToastContainer />

@@ -43,18 +43,27 @@ export const OrderTrackingModal: React.FC = () => {
 
   if (!isTrackingModalOpen) return null;
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
       showToast('لطفاً کد پیگیری یا شماره تماس را وارد کنید.', 'error');
       return;
     }
-    const found = findOrderByTracking(searchQuery);
-    if (found) {
-      setSelectedOrder(found);
-      showToast(`سفارش با کد ${found.trackingCode} یافت شد.`, 'success');
+    const foundList = await findOrderByTracking(searchQuery);
+    if (foundList && foundList.length > 0) {
+      setSelectedOrder(foundList[0]);
+      showToast(`سفارش با کد ${foundList[0].trackingCode} یافت شد.`, 'success');
     } else {
-      showToast('سفارشی با این مشخصات یافت نشد.', 'error');
+      // Check local state fallback
+      const localMatch = orders.find(
+        (o) => o.trackingCode.toLowerCase().includes(searchQuery.trim().toLowerCase()) || o.recipientPhone.includes(searchQuery.trim())
+      );
+      if (localMatch) {
+        setSelectedOrder(localMatch);
+        showToast(`سفارش با کد ${localMatch.trackingCode} یافت شد.`, 'success');
+      } else {
+        showToast('سفارشی با این مشخصات یافت نشد.', 'error');
+      }
     }
   };
 

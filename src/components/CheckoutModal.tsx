@@ -30,8 +30,6 @@ export const CheckoutModal: React.FC = () => {
     cart, 
     user, 
     createOrder, 
-    setActiveGatewayOrder, 
-    setIsGatewayOpen, 
     showToast,
     clearCart,
     triggerCelebration,
@@ -44,6 +42,7 @@ export const CheckoutModal: React.FC = () => {
   const [city, setCity] = useState(user?.city || 'تهران');
   const [address, setAddress] = useState(user?.address || '');
   const [postalCode, setPostalCode] = useState(user?.postalCode || '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Pre-dispatch Photo State
   const [sendPreDispatchPhoto, setSendPreDispatchPhoto] = useState(true);
@@ -85,34 +84,38 @@ export const CheckoutModal: React.FC = () => {
       return;
     }
 
-    // Create Order in context
-    const newOrder = createOrder({
+    setIsSubmitting(true);
+
+    // Create Order in server DB (recalculating actual prices securely on the server)
+    const newOrder = await createOrder({
       items: [...cart],
-      totalAmount: subtotal,
-      shippingCost,
-      finalAmount,
       paymentMethod,
       deliveryDate,
       deliveryTimeSlot,
-      recipientName,
-      recipientPhone,
-      recipientAddress: address,
+      recipientName: recipientName.trim(),
+      recipientPhone: recipientPhone.trim(),
+      recipientAddress: address.trim(),
       recipientCity: city,
       notes: notes || undefined,
-      sendPreDispatchPhoto,
-      preDispatchPhotoUrl: sendPreDispatchPhoto ? (cart[0]?.product?.image || 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80') : undefined
+      sendPreDispatchPhoto
     });
 
+    if (!newOrder) {
+      setIsSubmitting(false);
+      return;
+    }
+
     setIsCheckoutModalOpen(false);
+    setIsSubmitting(false);
 
     if (paymentMethod === 'shaparak') {
       try {
-        showToast('در حال انتقال به درگاه امن زرین‌پال...', 'info');
+        showToast('در حال انتقال به درگاه امن پرداخت بانکی زرین‌پال...', 'info');
         const response = await fetch('/api/payment/request', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            amount: finalAmount,
+            orderId: newOrder.id,
             description: `سفارش ${newOrder.trackingCode} از گل آریس`,
             callback_url: `${window.location.origin}/?payment_verify=true&order_id=${newOrder.id}`,
             mobile: user?.phone || recipientPhone
@@ -123,7 +126,7 @@ export const CheckoutModal: React.FC = () => {
         if (data.paymentUrl) {
           window.location.href = data.paymentUrl;
         } else {
-          showToast('خطا در اتصال به درگاه زرین‌پال. لطفا مجددا تلاش کنید.', 'error');
+          showToast('خطا در اتصال به درگاه زرین‌پال. لطفاً مجدداً تلاش فرمایید.', 'error');
           console.error('Payment Request Error:', data);
         }
       } catch (error) {
@@ -134,7 +137,7 @@ export const CheckoutModal: React.FC = () => {
       // Offline payment
       clearCart();
       triggerCelebration();
-      showToast(`سفارش شما با کد پیگیری ${newOrder.trackingCode} با موفقیت ثبت شد!`, 'success');
+      showToast(`سفارش شما با کد پیگیری ${newOrder.trackingCode} در سامانه ثبت گردید!`, 'success');
       setIsTrackingModalOpen(true);
     }
   };

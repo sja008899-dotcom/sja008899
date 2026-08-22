@@ -23,7 +23,7 @@ interface SitemapModalProps {
 }
 
 export const SitemapModal: React.FC<SitemapModalProps> = ({ isOpen, onClose }) => {
-  const { siteContent, setActiveTab, setSelectedCategory, setQuickViewProduct, showToast } = useApp();
+  const { siteContent, products, blogPosts, setActiveTab, setSelectedCategory, setQuickViewProduct, showToast } = useApp();
   const [activeTabType, setActiveTabType] = useState<'visual' | 'xml' | 'robots' | 'schema'>('visual');
   const [copied, setCopied] = useState(false);
 
@@ -60,7 +60,7 @@ ${siteContent.site.categories.map((c) => `  <url>
   </url>`).join('\n')}
 
   <!-- Products & Flower Offerings -->
-${siteContent.products.map((p) => `  <url>
+${products.map((p) => `  <url>
     <loc>https://golarys.ir/product/${p.slug}</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>daily</changefreq>
@@ -72,7 +72,7 @@ ${siteContent.products.map((p) => `  <url>
   </url>`).join('\n')}
 
   <!-- Blog Articles -->
-${siteContent.blog.map((b) => `  <url>
+${blogPosts.map((b) => `  <url>
     <loc>https://golarys.ir/blog/${b.slug}</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>monthly</changefreq>
@@ -237,20 +237,23 @@ Sitemap: https://golarys.ir/sitemap.xml
                   دسته‌بندی‌های تخصصی بازارچه:
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {siteContent.site.categories.map((c) => (
-                    <button
-                      key={c.slug}
-                      onClick={() => {
-                        setSelectedCategory(c.slug);
-                        setActiveTab('marketplace');
-                        onClose();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#2D5A27] hover:text-white border border-stone-200 text-xs font-bold text-stone-700 transition-colors cursor-pointer"
-                    >
-                      {c.name} ({toPersianDigits(c.count)} محصول)
-                    </button>
-                  ))}
+                  {siteContent.site.categories.map((c) => {
+                    const count = products.filter((p) => p.categorySlug === c.slug).length;
+                    return (
+                      <button
+                        key={c.slug}
+                        onClick={() => {
+                          setSelectedCategory(c.slug);
+                          setActiveTab('marketplace');
+                          onClose();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#2D5A27] hover:text-white border border-stone-200 text-xs font-bold text-stone-700 transition-colors cursor-pointer"
+                      >
+                        {c.name} ({toPersianDigits(count)} محصول)
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

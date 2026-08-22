@@ -100,7 +100,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-sm text-stone-300 leading-relaxed max-w-md">
-              {siteContent.site.brand.tagline_fa}. پلتفرم خرید مستقیم گل و گیاه تازه از گلخانه‌داران محلات و گلدان‌های سرامیکی دست‌ساز لالجین با عکاسی اختصاصی و تضمین ماندگاری.
+              {siteContent.site.brand.tagline}. پلتفرم خرید مستقیم گل و گیاه تازه از گلخانه‌داران محلات و گلدان‌های سرامیکی دست‌ساز لالجین با عکاسی اختصاصی و تضمین ماندگاری.
             </p>
 
             <div className="flex items-center gap-3 pt-2">

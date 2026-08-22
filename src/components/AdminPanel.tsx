@@ -54,11 +54,9 @@ export const AdminPanel: React.FC = () => {
     showToast,
     setActiveTab,
     isAdminAuthenticated,
-    adminPassword,
     adminLogin,
     adminLogout,
     changeAdminPassword,
-    resetAdminPassword,
     orders,
     updateOrderStatus,
     updateOrder,
@@ -112,19 +110,19 @@ export const AdminPanel: React.FC = () => {
     tags: 'نگهداری گل, ترفند'
   });
 
-  const handleAdminPasswordSubmit = (e: React.FormEvent) => {
+  const handleAdminPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passwordInput.trim()) {
       showToast('لطفاً رمز عبور را وارد کنید.', 'error');
       return;
     }
-    const success = adminLogin(passwordInput);
+    const success = await adminLogin(passwordInput);
     if (success) {
       setPasswordInput('');
     }
   };
 
-  const handleChangePasswordSubmit = (e: React.FormEvent) => {
+  const handleChangePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPassInput || !newPassInput || !confirmNewPassInput) {
       showToast('لطفاً تمامی فیلدهای تغییر رمز را تکمیل کنید.', 'error');
@@ -134,7 +132,7 @@ export const AdminPanel: React.FC = () => {
       showToast('رمز عبور جدید و تکرار آن یکسان نیستند.', 'error');
       return;
     }
-    const success = changeAdminPassword(currentPassInput, newPassInput);
+    const success = await changeAdminPassword(currentPassInput, newPassInput);
     if (success) {
       setCurrentPassInput('');
       setNewPassInput('');
@@ -1280,18 +1278,10 @@ export const AdminPanel: React.FC = () => {
               </p>
             </div>
 
-            <button
-              onClick={() => {
-                if (window.confirm('آیا از بازنشانی رمز عبور به مقدار پیش‌فرض اولیه (Gavad) اطمینان دارید؟')) {
-                  resetAdminPassword();
-                }
-              }}
-              className="px-4 py-2 bg-stone-100 hover:bg-rose-50 text-stone-700 hover:text-rose-700 border border-stone-200 hover:border-rose-200 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
-              title="بازنشانی رمز عبور به Gavad"
-            >
-              <RefreshCw className="w-4 h-4 text-stone-400 group-hover:text-rose-500" />
-              <span>بازنشانی به رمز اولیه (Gavad)</span>
-            </button>
+            <div className="px-4 py-2 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold rounded-xl flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>احراز هویت رمزنگاری‌شده سرور</span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">

@@ -17,7 +17,7 @@ import {
   Filter
 } from 'lucide-react';
 import { sampleVendors } from '../data/initialContent';
-import { toPersianDigits } from '../lib/formatters';
+import { toPersianDigits, matchPersianSearch } from '../lib/formatters';
 
 export const MarketplaceView: React.FC = () => {
   const { 
@@ -50,14 +50,14 @@ export const MarketplaceView: React.FC = () => {
       if (onlyInStock && !p.inStock) {
         return false;
       }
-      // Search query
+      // Search query with Persian normalization (supports Arabic chars, half-spaces, and typo tolerance)
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchName = p.name.toLowerCase().includes(q);
-        const matchDesc = p.description.toLowerCase().includes(q);
-        const matchVendor = p.vendor.name.toLowerCase().includes(q);
-        const matchTags = p.tags.some((t) => t.toLowerCase().includes(q));
-        if (!matchName && !matchDesc && !matchVendor && !matchTags) {
+        const matchName = matchPersianSearch(p.name, searchQuery);
+        const matchNameEn = p.nameEn ? p.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+        const matchDesc = matchPersianSearch(p.description, searchQuery);
+        const matchVendor = matchPersianSearch(p.vendor.name, searchQuery) || matchPersianSearch(p.vendor.city, searchQuery);
+        const matchTags = p.tags.some((t) => matchPersianSearch(t, searchQuery));
+        if (!matchName && !matchNameEn && !matchDesc && !matchVendor && !matchTags) {
           return false;
         }
       }
@@ -221,7 +221,7 @@ export const MarketplaceView: React.FC = () => {
             </span>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-stone-500 hover:text-stone-800 font-bold underline cursor-pointer"
+              className="text-stone-500 hover:text-stone-800 font-bold hover:bg-stone-200/60 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
             >
               پاک کردن جستجو
             </button>
@@ -349,7 +349,7 @@ export const MarketplaceView: React.FC = () => {
           </div>
           <button
             onClick={() => setActiveTab('sellers')}
-            className="text-xs font-bold text-[#2D5A27] hover:underline cursor-pointer flex items-center gap-1"
+            className="text-xs font-bold text-[#2D5A27] hover:text-[#1F3F1B] bg-[#2D5A27]/8 hover:bg-[#2D5A27]/15 px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1"
           >
             <span>مشاهده شرایط فروشندگی</span>
           </button>

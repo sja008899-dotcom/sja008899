@@ -75,7 +75,7 @@ export const HeroSection: React.FC = () => {
             <div className="space-y-2">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-[#1F3F1B] leading-tight font-heading">
                 بازار بزرگ گل و گیاه ایران؛ <br />
-                <span className="text-[#2D5A27] underline decoration-[#D4AF37] decoration-wavy decoration-2">
+                <span className="text-[#2D5A27]">
                   خرید آنلاین گل تازه
                 </span> مستقیم از باغبان
               </h1>

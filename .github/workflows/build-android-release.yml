@@ -1,0 +1,126 @@
+name: Build Android APK/AAB for Google Play
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App Version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Make gradlew executable
+        run: chmod +x ./android/gradlew
+
+      # Decode signing key (base64)
+      - name: Decode Keystore File
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./android/app/release.keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      # Build Signed Release APK
+      - name: Build Android Release APK
+        working-directory: ./android
+        run: ./gradlew assembleRelease
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+
+      # Build AAB (Android App Bundle) for Google Play
+      - name: Build Android App Bundle (AAB)
+        working-directory: ./android
+        run: ./gradlew bundleRelease
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+
+      # Upload APK to Artifacts
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Golarys-App-Android-APK
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 90
+
+      # Upload AAB to Artifacts
+      - name: Upload Release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Golarys-App-Android-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 90
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Golarys Android App ${{ github.ref_name }}"
+          body: |
+            نسخه رسمی اپلیکیشن اندروید گالریس
+            
+            **فایل‌های موجود:**
+            - APK (نصب مستقیم): `app-release.apk`
+            - AAB (برای Google Play): `app-release.aab`
+            
+            **تاریخ انتشار:** ${{ github.event.head_commit.timestamp }}
+          draft: false
+          prerelease: false
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
+            android/app/build/outputs/bundle/release/app-release.aab
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload to Google Play Console (Optional - requires Google Play credentials)
+      - name: Upload to Google Play Console
+        uses: r0adkll/upload-google-play@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_CONSOLE_JSON }}
+          packageName: 'com.golarys.app'
+          releaseFiles: 'android/app/build/outputs/bundle/release/app-release.aab'
+          track: 'internal'
+          status: 'draft'
+

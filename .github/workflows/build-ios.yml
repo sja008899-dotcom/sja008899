@@ -1,0 +1,59 @@
+name: Build iOS (IPA) for App Store / TestFlight
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App Version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Capacitor iOS
+        run: npx cap sync ios
+
+      - name: Build iOS Archive (Unsigned / Direct CI Build)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -destination generic/platform=iOS clean archive -archivePath build/App.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+
+      - name: Export Unsigned IPA Package
+        run: |
+          mkdir -p ios/export
+          mkdir -p ios/Payload
+          cp -r ios/App/build/App.xcarchive/Products/Applications/App.app ios/Payload/
+          cd ios
+          zip -r Golarys-iOS.ipa Payload
+          mv Golarys-iOS.ipa export/
+
+      - name: Upload iOS IPA to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Golarys-App-iOS-IPA
+          path: ios/export/Golarys-iOS.ipa
+          retention-days: 90

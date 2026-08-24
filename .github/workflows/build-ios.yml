@@ -68,7 +68,7 @@ jobs:
             --apiKey $APP_STORE_CONNECT_API_KEY
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CapApp.ipa
           path: ios/App/build/CapApp.ipa

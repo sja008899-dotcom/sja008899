@@ -1,0 +1,14 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Binary files - prevent line ending conversion and corruption
+*.jar binary
+*.keystore binary
+*.jks binary
+*.aab binary
+*.apk binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary

@@ -637,6 +637,96 @@ async function startServer() {
     res.status(201).json(newPost);
   });
 
+  // Dynamic XML Sitemap for Google Search Console
+  app.get("/sitemap.xml", (req: Request, res: Response) => {
+    const baseUrl = "https://golarys.ir";
+    const today = new Date().toISOString().split("T")[0];
+    const products = db.getProducts();
+    const blogPosts = db.getBlogPosts();
+
+    const staticRoutes = [
+      { path: "", priority: "1.0", changefreq: "daily" },
+      { path: "/marketplace", priority: "0.95", changefreq: "daily" },
+      { path: "/handicrafts", priority: "0.90", changefreq: "daily" },
+      { path: "/sellers", priority: "0.80", changefreq: "weekly" },
+      { path: "/about", priority: "0.75", changefreq: "monthly" },
+      { path: "/blog", priority: "0.85", changefreq: "weekly" },
+      { path: "/contact", priority: "0.70", changefreq: "monthly" },
+    ];
+
+    const categories = [
+      "roses",
+      "houseplants",
+      "orchids",
+      "gift-baskets",
+      "ceramic-pots",
+      "copper-pots",
+      "dried-flowers",
+      "seeds-soil",
+      "gardening-tools",
+    ];
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+
+    // Static pages
+    for (const route of staticRoutes) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}${route.path}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
+      xml += `    <priority>${route.priority}</priority>\n`;
+      xml += `  </url>\n`;
+    }
+
+    // Categories
+    for (const cat of categories) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}/category/${cat}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>weekly</changefreq>\n`;
+      xml += `    <priority>0.85</priority>\n`;
+      xml += `  </url>\n`;
+    }
+
+    // Products
+    for (const prod of products) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}/product/${prod.slug}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>daily</changefreq>\n`;
+      xml += `    <priority>0.90</priority>\n`;
+      if (prod.image) {
+        xml += `    <image:image>\n`;
+        xml += `      <image:loc>${prod.image}</image:loc>\n`;
+        xml += `      <image:title>${prod.name.replace(/&/g, '&amp;')}</image:title>\n`;
+        xml += `    </image:image>\n`;
+      }
+      xml += `  </url>\n`;
+    }
+
+    // Blog articles
+    for (const post of blogPosts) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${baseUrl}/blog/${post.slug}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>monthly</changefreq>\n`;
+      xml += `    <priority>0.80</priority>\n`;
+      if (post.image) {
+        xml += `    <image:image>\n`;
+        xml += `      <image:loc>${post.image}</image:loc>\n`;
+        xml += `      <image:title>${post.title.replace(/&/g, '&amp;')}</image:title>\n`;
+        xml += `    </image:image>\n`;
+      }
+      xml += `  </url>\n`;
+    }
+
+    xml += `</urlset>`;
+
+    res.header("Content-Type", "application/xml; charset=utf-8");
+    res.send(xml);
+  });
+
   // ==========================================
   // 8. VITE MIDDLEWARE & STATIC ASSETS
   // ==========================================

@@ -1,59 +1,74 @@
-name: Build iOS (IPA) for App Store / TestFlight
+name: Build iOS App for App Store
 
 on:
   push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'App Version (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
-
-permissions:
-  contents: write
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-ios:
-    runs-on: macos-14
+  build:
+    runs-on: macos-latest
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v3
+      
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 22
-          cache: 'npm'
-
+          node-version: '18'
+      
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Build Web Application
+        run: npm install
+      
+      - name: Build web assets
         run: npm run build
-
-      - name: Sync Capacitor iOS
-        run: npx cap sync ios
-
-      - name: Build iOS Archive (Unsigned / Direct CI Build)
+      
+      - name: Setup iOS build
+        run: |
+          cd ios
+          pod install
+      
+      - name: Import signing certificate
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+          security import certificate.p12 -k ~/Library/Keychains/login.keychain-db -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
+      
+      - name: Import provisioning profile
+        env:
+          PROVISION_PROFILE_BASE64: ${{ secrets.APPLE_PROVISION_PROFILE }}
+        run: |
+          echo $PROVISION_PROFILE_BASE64 | base64 --decode > profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+      
+      - name: Build IPA
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -destination generic/platform=iOS clean archive -archivePath build/App.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
-
-      - name: Export Unsigned IPA Package
+          xcodebuild archive \
+            -scheme CapApp \
+            -configuration Release \
+            -archivePath build/CapApp.xcarchive
+          
+          xcodebuild -exportArchive \
+            -archivePath build/CapApp.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath build/
+      
+      - name: Upload IPA to App Store Connect
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          mkdir -p ios/export
-          mkdir -p ios/Payload
-          cp -r ios/App/build/App.xcarchive/Products/Applications/App.app ios/Payload/
-          cd ios
-          zip -r Golarys-iOS.ipa Payload
-          mv Golarys-iOS.ipa export/
-
-      - name: Upload iOS IPA to Artifacts
-        uses: actions/upload-artifact@v4
+          xcrun altool --upload-app \
+            --file build/CapApp.ipa \
+            --type ios \
+            --apiKey $APP_STORE_CONNECT_API_KEY
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: Golarys-App-iOS-IPA
-          path: ios/export/Golarys-iOS.ipa
-          retention-days: 90
+          name: CapApp.ipa
+          path: ios/App/build/CapApp.ipa

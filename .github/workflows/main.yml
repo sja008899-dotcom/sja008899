@@ -44,22 +44,15 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      - name: Ensure Gradle Wrapper & Permissions
+      - name: Generate and Ensure Gradle Wrapper
         working-directory: ./android
         run: |
-          if command -v gradle &> /dev/null; then
-            gradle wrapper --gradle-version 8.14.3 --distribution-type bin || true
-          fi
-          chmod +x ./gradlew || true
+          gradle wrapper --gradle-version 8.14.3 --distribution-type bin
+          chmod +x ./gradlew
 
       - name: Build Android APK (Debug)
         working-directory: ./android
-        run: |
-          if [ -f "./gradlew" ] && [ -f "./gradle/wrapper/gradle-wrapper.jar" ]; then
-            ./gradlew assembleDebug --no-daemon --stacktrace
-          else
-            gradle assembleDebug --no-daemon --stacktrace
-          fi
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload Android APK to Artifacts
         uses: actions/upload-artifact@v4

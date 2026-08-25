@@ -78,9 +78,12 @@ jobs:
       - name: Build iOS Archive & Package
         run: |
           cd ios/App
+          mkdir -p build
           if [ "$SIGNED_BUILD" = "true" ]; then
             xcodebuild archive \
+              -project App.xcodeproj \
               -scheme App \
+              -destination 'generic/platform=iOS' \
               -configuration Release \
               -archivePath build/App.xcarchive
             
@@ -92,16 +95,19 @@ jobs:
             find build -name "*.ipa" -exec cp {} build/Golarys.ipa \;
           else
             xcodebuild archive \
+              -project App.xcodeproj \
               -scheme App \
+              -destination 'generic/platform=iOS' \
               -configuration Release \
               -archivePath build/App.xcarchive \
               CODE_SIGNING_ALLOWED=NO \
-              CODE_SIGNING_REQUIRED=NO
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY=""
             
             mkdir -p build/Payload
-            cp -r build/App.xcarchive/Products/Applications/App.app build/Payload/
+            cp -R build/App.xcarchive/Products/Applications/App.app build/Payload/
             cd build
-            zip -r Golarys.ipa Payload
+            zip -qr Golarys.ipa Payload
           fi
       
       - name: Upload IPA to App Store Connect

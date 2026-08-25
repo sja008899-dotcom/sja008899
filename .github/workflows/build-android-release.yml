@@ -36,15 +36,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Clean stale wrapper jar if any
-        run: rm -f android/gradle/wrapper/gradle-wrapper.jar
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.14.3
-          validate-wrappers: false
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
@@ -54,11 +45,13 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      - name: Ensure Pristine Gradle Wrapper
+      - name: Ensure Gradle Wrapper & Permissions
         working-directory: ./android
         run: |
-          gradle wrapper --gradle-version 8.14.3
-          chmod +x ./gradlew
+          if command -v gradle &> /dev/null; then
+            gradle wrapper --gradle-version 8.14.3 --distribution-type bin || true
+          fi
+          chmod +x ./gradlew || true
 
       # Decode signing key (base64) if secret provided
       - name: Decode Keystore File
@@ -75,7 +68,12 @@ jobs:
       # Build Release APK
       - name: Build Android Release APK
         working-directory: ./android
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        run: |
+          if [ -f "./gradlew" ] && [ -f "./gradle/wrapper/gradle-wrapper.jar" ]; then
+            ./gradlew assembleRelease --no-daemon --stacktrace
+          else
+            gradle assembleRelease --no-daemon --stacktrace
+          fi
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
@@ -84,7 +82,12 @@ jobs:
       # Build AAB (Android App Bundle) for Google Play
       - name: Build Android App Bundle (AAB)
         working-directory: ./android
-        run: ./gradlew bundleRelease --no-daemon --stacktrace
+        run: |
+          if [ -f "./gradlew" ] && [ -f "./gradle/wrapper/gradle-wrapper.jar" ]; then
+            ./gradlew bundleRelease --no-daemon --stacktrace
+          else
+            gradle bundleRelease --no-daemon --stacktrace
+          fi
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}

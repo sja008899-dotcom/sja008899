@@ -94,18 +94,19 @@ jobs:
             
             find build -name "*.ipa" -exec cp {} build/Golarys.ipa \;
           else
-            xcodebuild archive \
+            xcodebuild \
               -project App.xcodeproj \
               -scheme App \
               -destination 'generic/platform=iOS' \
               -configuration Release \
-              -archivePath build/App.xcarchive \
+              -derivedDataPath build \
               CODE_SIGNING_ALLOWED=NO \
               CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGN_IDENTITY=""
+              CODE_SIGN_IDENTITY="" \
+              build
             
             mkdir -p build/Payload
-            cp -R build/App.xcarchive/Products/Applications/App.app build/Payload/
+            cp -R build/Build/Products/Release-iphoneos/App.app build/Payload/
             cd build
             zip -qr Golarys.ipa Payload
           fi

@@ -1748,35 +1748,45 @@ echo "Done. Created \${OUT}"`}
                 <span>مدیریت و انتشار اپلیکیشن موبایل (Android & iOS)</span>
               </h3>
               <p className="text-xs text-stone-500 mt-1">
-                پروژه گل آریس به سیستم Capacitor و پکیج بومی Android با امضا اختصاصی Keystore و آیکون رسمی فروشگاه‌های اپلیکیشن مجهز شده است.
+                پروژه گل آریس به سیستم Capacitor و پکیج بومی Android با امضا اختصاصی Keystore و آیکون بدون پس‌زمینه با وضوح بالا مجهز شده است.
               </p>
             </div>
-            <a 
-              href="/golarys-play-store-icon-512.png" 
-              download="golarys-play-store-icon-512.png"
-              className="px-4 py-2 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-xs"
-            >
-              <DownloadCloud className="w-4 h-4 text-[#D4AF37]" />
-              <span>دانلود آیکون رسمی (512x512)</span>
-            </a>
+            <div className="flex items-center gap-2">
+              <a 
+                href="/logo-transparent.png" 
+                download="golarys-logo-transparent.png"
+                className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#1F3F1B] border border-emerald-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors shadow-2xs"
+              >
+                <DownloadCloud className="w-4 h-4 text-[#D4AF37]" />
+                <span>دانلود آیکون بدون پس‌زمینه (PNG شفاف)</span>
+              </a>
+              <a 
+                href="/golarys-play-store-icon-512.png" 
+                download="golarys-play-store-icon-512.png"
+                className="px-3 py-2 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors shadow-2xs"
+              >
+                <DownloadCloud className="w-4 h-4 text-[#D4AF37]" />
+                <span>دانلود آیکون استور (512x512)</span>
+              </a>
+            </div>
           </div>
 
           {/* Official Store Icon Card */}
-          <div className="bg-gradient-to-l from-emerald-900 via-[#1F3F1B] to-[#17361A] text-white p-5 rounded-2xl flex flex-col sm:flex-row items-center gap-5 shadow-sm border border-emerald-800">
-            <div className="relative shrink-0">
+          <div className="bg-gradient-to-l from-emerald-950 via-[#1F3F1B] to-[#17361A] text-white p-5 rounded-2xl flex flex-col sm:flex-row items-center gap-5 shadow-sm border border-emerald-800">
+            <div className="relative shrink-0 p-2 bg-stone-900/40 rounded-2xl border border-white/10">
               <img 
-                src="/golarys-play-store-icon-512.png" 
-                alt="Golarys Official App Icon" 
-                className="w-24 h-24 rounded-2xl shadow-xl border-2 border-[#D4AF37]/50 object-cover"
+                src="/logo-transparent.png" 
+                alt="Golarys Official App Icon Transparent" 
+                className="w-24 h-24 drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] object-contain"
               />
               <span className="absolute -bottom-2 -right-2 bg-[#D4AF37] text-stone-950 font-black text-[10px] px-2 py-0.5 rounded-full shadow-md">
-                512×512
+                شفاف (HD)
               </span>
             </div>
             <div className="space-y-1.5 text-center sm:text-right">
-              <h4 className="font-bold text-base text-[#D4AF37]">آیکون استاندارد گوگل‌پلی و کافه‌بازار (Hi-Res Icon)</h4>
+              <h4 className="font-bold text-base text-[#D4AF37]">نشان اختصاصی و آیکون وکتور زنبق طلایی گل آریس</h4>
               <p className="text-xs text-stone-200 leading-relaxed max-w-xl">
-                لوگوی جدید گل آریس با نشان زنبق طلایی و زمینه سبز لوکس بر روی تمامی ابعاد لانچر اندروید (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)، وب اپلیکیشن پیشرونده (PWA) و متاتگ‌های استور اعمال گردیده است.
+                آیکون جدید بدون پس‌زمینه با گلبرگ‌های سبز زمردی، نگین مروارید مرکزی و درخشش طلایی بازتولید شده و در تمامی اندازه‌های لانچر اندروید (HD, Full HD, 4K)، وب‌اپلیکیشن (PWA) و هدر سایت فعال گردیده است.
               </p>
             </div>
           </div>

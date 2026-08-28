@@ -48,73 +48,113 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
     <div
       className={`inline-flex items-center gap-2.5 select-none transition-transform ${className}`}
     >
-      {/* Golden Iris Flower Emblem (Transparent Background) */}
-      {!imgError ? (
-        <img
-          src="/logo-gold.png"
-          alt="Golarys Gold Iris Logo"
-          className={`${imgSize} object-contain shrink-0 transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_4px_8px_rgba(212,175,55,0.25)]`}
-          onError={() => setImgError(true)}
-          referrerPolicy="no-referrer"
-        />
-      ) : (
-        <svg
-          width={px}
-          height={px}
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="shrink-0 transition-transform duration-300 group-hover:scale-105"
-        >
-          <defs>
-            <linearGradient id="goldCenterPetalFallback" x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" stopColor="#F6DA77" />
-              <stop offset="50%" stopColor="#D9A833" />
-              <stop offset="100%" stopColor="#B37E18" />
-            </linearGradient>
-            <linearGradient id="goldLeftPetalFallback" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#F5D875" />
-              <stop offset="50%" stopColor="#D8A531" />
-              <stop offset="100%" stopColor="#A87313" />
-            </linearGradient>
-            <linearGradient id="goldRightPetalFallback" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#F5D875" />
-              <stop offset="50%" stopColor="#D8A531" />
-              <stop offset="100%" stopColor="#A87313" />
-            </linearGradient>
-            <linearGradient id="goldStemFallback" x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" stopColor="#E5B943" />
-              <stop offset="50%" stopColor="#CE9925" />
-              <stop offset="100%" stopColor="#96640E" />
-            </linearGradient>
-            <linearGradient id="emeraldLeftFallback" x1="30%" y1="20%" x2="80%" y2="85%">
-              <stop offset="0%" stopColor="#38773C" />
-              <stop offset="50%" stopColor="#2A5C2D" />
-              <stop offset="100%" stopColor="#1B3F1E" />
-            </linearGradient>
-            <linearGradient id="emeraldRightFallback" x1="70%" y1="20%" x2="20%" y2="85%">
-              <stop offset="0%" stopColor="#38773C" />
-              <stop offset="50%" stopColor="#2A5C2D" />
-              <stop offset="100%" stopColor="#1B3F1E" />
-            </linearGradient>
-            <radialGradient id="pearlGradFallback" cx="40%" cy="35%" r="65%">
-              <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="60%" stopColor="#FBF4EA" />
-              <stop offset="100%" stopColor="#EAD8C1" />
-            </radialGradient>
-          </defs>
-          <g transform="scale(0.195) translate(0, 0)">
-            <path d="M 256 256 C 220 200, 140 210, 148 276 C 154 322, 204 336, 256 270 Z" fill="url(#emeraldLeftFallback)" />
-            <path d="M 256 256 C 292 200, 372 210, 364 276 C 358 322, 308 336, 256 270 Z" fill="url(#emeraldRightFallback)" />
-            <path d="M 256 250 C 244 285, 240 335, 256 388 C 272 335, 268 285, 256 250 Z" fill="url(#goldStemFallback)" />
-            <path d="M 256 250 C 225 220, 195 165, 222 145 C 245 130, 252 185, 256 250 Z" fill="url(#goldLeftPetalFallback)" />
-            <path d="M 256 250 C 287 220, 317 165, 290 145 C 267 130, 260 185, 256 250 Z" fill="url(#goldRightPetalFallback)" />
-            <path d="M 256 120 C 235 155, 240 215, 256 260 C 272 215, 277 155, 256 120 Z" fill="url(#goldCenterPetalFallback)" />
-            <circle cx="256" cy="256" r="20" fill="#C99426" />
-            <circle cx="256" cy="256" r="17" fill="url(#pearlGradFallback)" stroke="#DDAE3B" strokeWidth="2" />
-          </g>
-        </svg>
-      )}
+      {/* Golden Iris Flower Emblem (Razor-sharp, Large, Transparent Vector) */}
+      <svg
+        width={px}
+        height={px}
+        viewBox="0 0 512 512"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="shrink-0 transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_4px_10px_rgba(212,175,55,0.3)]"
+      >
+        <defs>
+          <linearGradient id="goldCenterPetalFull" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#FFE58F" />
+            <stop offset="30%" stopColor="#F5C842" />
+            <stop offset="70%" stopColor="#D49B24" />
+            <stop offset="100%" stopColor="#A67012" />
+          </linearGradient>
+
+          <linearGradient id="goldLeftPetalFull" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFE899" />
+            <stop offset="35%" stopColor="#F5C842" />
+            <stop offset="75%" stopColor="#C98F1D" />
+            <stop offset="100%" stopColor="#99630D" />
+          </linearGradient>
+
+          <linearGradient id="goldRightPetalFull" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FFE899" />
+            <stop offset="35%" stopColor="#F5C842" />
+            <stop offset="75%" stopColor="#C98F1D" />
+            <stop offset="100%" stopColor="#99630D" />
+          </linearGradient>
+
+          <linearGradient id="goldStemFull" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#FCE07A" />
+            <stop offset="45%" stopColor="#DCA427" />
+            <stop offset="85%" stopColor="#B37812" />
+            <stop offset="100%" stopColor="#7E4F06" />
+          </linearGradient>
+
+          <linearGradient id="emeraldLeftFull" x1="20%" y1="15%" x2="85%" y2="85%">
+            <stop offset="0%" stopColor="#439348" />
+            <stop offset="40%" stopColor="#2E6C32" />
+            <stop offset="80%" stopColor="#1B471E" />
+            <stop offset="100%" stopColor="#102E13" />
+          </linearGradient>
+
+          <linearGradient id="emeraldRightFull" x1="80%" y1="15%" x2="15%" y2="85%">
+            <stop offset="0%" stopColor="#439348" />
+            <stop offset="40%" stopColor="#2E6C32" />
+            <stop offset="80%" stopColor="#1B471E" />
+            <stop offset="100%" stopColor="#102E13" />
+          </linearGradient>
+
+          <radialGradient id="pearlGradFull" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#FFFFFF" />
+            <stop offset="45%" stopColor="#FFF7EC" />
+            <stop offset="75%" stopColor="#F2DFC7" />
+            <stop offset="100%" stopColor="#D9BE9B" />
+          </radialGradient>
+
+          <filter id="logoShadowFull" x="-15%" y="-15%" width="130%" height="130%">
+            <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.25" />
+          </filter>
+        </defs>
+
+        <g id="golarys-vector-emblem" filter="url(#logoShadowFull)">
+          <path
+            d="M 256 256 C 185 140, 24 160, 28 300 C 32 395, 140 415, 256 280 Z"
+            fill="url(#emeraldLeftFull)"
+          />
+
+          <path
+            d="M 256 256 C 327 140, 488 160, 484 300 C 480 395, 372 415, 256 280 Z"
+            fill="url(#emeraldRightFull)"
+          />
+
+          <path
+            d="M 256 250 C 230 320, 222 410, 256 492 C 290 410, 282 320, 256 250 Z"
+            fill="url(#goldStemFull)"
+          />
+
+          <path
+            d="M 256 256 C 190 210, 125 130, 182 65 C 228 35, 248 145, 256 256 Z"
+            fill="url(#goldLeftPetalFull)"
+          />
+
+          <path
+            d="M 256 256 C 322 210, 387 130, 330 65 C 284 35, 264 145, 256 256 Z"
+            fill="url(#goldRightPetalFull)"
+          />
+
+          <path
+            d="M 256 20 C 205 95, 210 195, 256 260 C 302 195, 307 95, 256 20 Z"
+            fill="url(#goldCenterPetalFull)"
+          />
+
+          <circle cx="256" cy="256" r="36" fill="#C99426" />
+          <circle
+            cx="256"
+            cy="256"
+            r="30"
+            fill="url(#pearlGradFull)"
+            stroke="#E6B843"
+            strokeWidth="3.5"
+          />
+          <circle cx="245" cy="245" r="7" fill="#FFFFFF" opacity="0.9" />
+        </g>
+      </svg>
 
       {/* Brand Typography */}
       {showText && !iconOnly && (

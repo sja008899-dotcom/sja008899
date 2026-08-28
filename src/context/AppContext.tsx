@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Product, CartItem, SiteContent, ActiveTab, BlogPost, User, Order, OrderStatus, DispatchedNotification, ContactMessage } from '../types';
 import { initialSiteContent, sampleProducts, sampleBlogPosts } from '../data/initialContent';
+import { parseRoute, getPathForTab, getPathForProduct } from '../lib/routing';
 import confetti from 'canvas-confetti';
 
 interface Toast {
@@ -73,6 +74,7 @@ interface AppContextType {
   }) => Promise<Order | null>;
   updateOrderStatus: (orderId: string, status: OrderStatus, rrn?: string) => Promise<void>;
   updateOrder: (orderId: string, updates: Partial<Order>) => Promise<void>;
+  savePreDispatchPhoto: (orderId: string, photoUrl: string) => Promise<boolean>;
   approvePreDispatchPhoto: (orderId: string, approved: boolean, feedback?: string) => Promise<void>;
   findOrderByTracking: (codeOrPhone: string) => Promise<Order[]>;
   isCheckoutModalOpen: boolean;
@@ -120,7 +122,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+  const initialRoute = typeof window !== 'undefined' ? parseRoute(window.location.pathname) : { tab: 'home' as ActiveTab };
+  const [activeTab, setActiveTabState] = useState<ActiveTab>(initialRoute.tab);
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_CART_KEY);
@@ -139,8 +142,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [quickViewProduct, setQuickViewProductState] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProductState] = useState<Product | null>(null);
   const [selectedBlogArticle, setSelectedBlogArticle] = useState<BlogPost | null>(null);
   const [isGiftBuilderOpen, setIsGiftBuilderOpen] = useState(false);
   const [language, setLanguage] = useState<'fa' | 'en'>('fa');
@@ -256,32 +259,69 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // URL Hash & Keyboard shortcut listener for Admin Panel
-  useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.toLowerCase();
-      if (hash === '#admin' || hash === '#panel' || hash === '#management') {
-        setActiveTab('admin');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    };
-
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.key === 'ش')) {
-        e.preventDefault();
-        setActiveTab((prev) => (prev === 'admin' ? 'home' : 'admin'));
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('hashchange', handleHash);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+  // Synchronized Tab Setter that updates browser history URL
+  const setActiveTab = useCallback((tab: ActiveTab) => {
+    setActiveTabState(tab);
+    setQuickViewProductState(null);
+    setSelectedProductState(null);
+    const newPath = getPathForTab(tab);
+    if (window.location.pathname !== newPath) {
+      window.history.pushState({ tab }, '', newPath);
+    }
   }, []);
+
+  // Synchronized Product View that updates both selectedProduct & quickViewProduct and browser URL
+  const setQuickViewProduct = useCallback((product: Product | null) => {
+    setQuickViewProductState(product);
+    setSelectedProductState(product);
+    if (product) {
+      const newPath = getPathForProduct(product.slug);
+      if (window.location.pathname !== newPath) {
+        window.history.pushState({ productSlug: product.slug }, '', newPath);
+      }
+    } else {
+      const currentTabPath = getPathForTab(activeTab);
+      if (window.location.pathname.startsWith('/product/')) {
+        window.history.pushState({}, '', currentTabPath);
+      }
+    }
+  }, [activeTab]);
+
+  const setSelectedProduct = useCallback((product: Product | null) => {
+    setQuickViewProduct(product);
+  }, [setQuickViewProduct]);
+
+  // Handle browser back/forward buttons (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const { tab, productSlug } = parseRoute(window.location.pathname);
+      setActiveTabState(tab);
+      if (productSlug) {
+        const found = products.find((p) => p.slug === productSlug || p.id === productSlug);
+        if (found) {
+          setQuickViewProductState(found);
+          setSelectedProductState(found);
+        }
+      } else {
+        setQuickViewProductState(null);
+        setSelectedProductState(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [products]);
+
+  // Initial product route check once products load
+  useEffect(() => {
+    if (initialRoute.productSlug && products.length > 0) {
+      const found = products.find((p) => p.slug === initialRoute.productSlug || p.id === initialRoute.productSlug);
+      if (found) {
+        setQuickViewProductState(found);
+        setSelectedProductState(found);
+      }
+    }
+  }, [products]);
 
   // Handle Zarinpal Payment Verification Callback
   useEffect(() => {
@@ -564,6 +604,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setOrders((prev) => prev.map((ord) => (ord.id === orderId ? { ...ord, ...updates } : ord)));
   };
 
+  const savePreDispatchPhoto = async (orderId: string, photoUrl: string): Promise<boolean> => {
+    const adminToken = localStorage.getItem(TOKEN_ADMIN_KEY);
+    try {
+      const res = await fetch(`/api/orders/${orderId}/photo`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}` } : {})
+        },
+        body: JSON.stringify({ photoUrl })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setOrders((prev) => prev.map((ord) => (ord.id === orderId ? updated : ord)));
+        showToast('عکس محصول با موفقیت بارگذاری و برای مشتری ثبت گردید.', 'success');
+        return true;
+      } else {
+        const err = await res.json();
+        showToast(err.error || 'خطا در ثبت عکس در سرور', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطا در ارسال عکس به سرور.', 'error');
+      return false;
+    }
+  };
+
   const approvePreDispatchPhoto = async (orderId: string, approved: boolean, feedback?: string) => {
     try {
       const res = await fetch(`/api/orders/${orderId}/photo`, {
@@ -764,9 +831,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       );
 
       if (existingIndex > -1) {
-        const updated = [...prevCart];
-        updated[existingIndex].quantity += quantity;
-        return updated;
+        return prevCart.map((item, idx) =>
+          idx === existingIndex
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
       } else {
         return [
           ...prevCart,
@@ -864,6 +933,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         createOrder,
         updateOrderStatus,
         updateOrder,
+        savePreDispatchPhoto,
         approvePreDispatchPhoto,
         findOrderByTracking,
         isCheckoutModalOpen,

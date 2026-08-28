@@ -60,6 +60,7 @@ export const AdminPanel: React.FC = () => {
     orders,
     updateOrderStatus,
     updateOrder,
+    savePreDispatchPhoto,
     sendNotification,
     contactMessages,
     markContactMessageRead,
@@ -828,11 +829,14 @@ export const AdminPanel: React.FC = () => {
                           onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus, order.recipientPhone, order.trackingCode)}
                           className="w-full p-2 bg-white border border-stone-300 rounded-xl text-xs font-bold focus:ring-2 focus:ring-[#2D5A27]"
                         >
+                          <option value="awaiting_confirmation">در انتظار تایید پرداخت/سفارش</option>
+                          <option value="pending_payment">در انتظار پرداخت شاپرک</option>
                           <option value="paid">تایید پرداخت (شاپرک)</option>
                           <option value="preparing">در حال گل‌آرایی و آماده‌سازی</option>
                           <option value="gift_wrapping">بسته‌بندی هدیه و کارت پیام</option>
                           <option value="delivering">تحویل به پیک (در مسیر ارسال)</option>
                           <option value="delivered">تحویل نهایی شده</option>
+                          <option value="cancelled">لغو شده (برگشت موجودی)</option>
                         </select>
 
                         {order.notes && (
@@ -906,16 +910,17 @@ export const AdminPanel: React.FC = () => {
                       <div className="sm:col-span-3 flex gap-1.5">
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={async () => {
                             const photoUrl = order.preDispatchPhotoUrl || order.items[0]?.product?.image;
-                            updateOrder(order.id, { preDispatchPhotoUrl: photoUrl });
-                            showToast(`عکس گل‌آرایی برای مشتری به پنل کاربری ارسال شد.`, 'success');
-                            sendNotification(
-                              'sms',
-                              'عکس گل‌آرایی سفارش شما آماده شد',
-                              `خریدار گرامی، عکس دسته گل/محصول سفارش ${order.trackingCode} جهت تایید نهایی آماده شد. جهت مشاهده و تایید وارد پنل کاربری خود (بخش رهگیری سفارش) شوید.`,
-                              order.recipientPhone
-                            );
+                            const success = await savePreDispatchPhoto(order.id, photoUrl);
+                            if (success) {
+                              sendNotification(
+                                'sms',
+                                'عکس گل‌آرایی سفارش شما آماده شد',
+                                `خریدار گرامی، عکس دسته گل/محصول سفارش ${order.trackingCode} جهت تایید نهایی آماده شد. جهت مشاهده و تایید وارد پنل کاربری خود (بخش رهگیری سفارش) شوید.`,
+                                order.recipientPhone
+                              );
+                            }
                           }}
                           className="w-full py-2 px-3 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                         >

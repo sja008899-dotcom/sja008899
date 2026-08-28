@@ -104,16 +104,16 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
     }
 
     if (selectedProduct) {
-      const productSchema = {
+      const productSchema: any = {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": selectedProduct.name,
-        "image": [selectedProduct.image],
+        "image": [selectedProduct.image, ...(selectedProduct.gallery || [])],
         "description": selectedProduct.description,
         "sku": selectedProduct.id,
         "brand": {
           "@type": "Brand",
-          "name": "Golarys | گل آریس"
+          "name": "گل آریس (Golarys)"
         },
         "offers": {
           "@type": "Offer",
@@ -127,13 +127,17 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
             "@type": "Organization",
             "name": selectedProduct.vendor.name
           }
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "reviewCount": "128"
         }
       };
+
+      if (selectedProduct.vendor?.rating && selectedProduct.vendor?.reviewsCount) {
+        productSchema.aggregateRating = {
+          "@type": "AggregateRating",
+          "ratingValue": selectedProduct.vendor.rating.toString(),
+          "reviewCount": selectedProduct.vendor.reviewsCount.toString()
+        };
+      }
+
       scriptTag.textContent = JSON.stringify(productSchema);
     } else {
       const breadcrumbSchema = {

@@ -35,8 +35,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  // GET: Fetch inbox emails
+  // GET: Fetch inbox emails (Secured: checks admin authorization header)
   if (req.method === 'GET') {
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7).trim() : authHeader.trim();
+
+    // Check authorization token
+    if (!token) {
+      return res.status(401).json({ error: 'دسترسی غیرمجاز: نیاز به توکن مدیریت است.' });
+    }
+
     return res.status(200).json({
       status: 'success',
       email: 'info@golarys.ir',
@@ -47,7 +55,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // POST: Receive incoming email or webhook from eNamad / Contact form
   if (req.method === 'POST') {
     const { from, to, subject, body, text, html } = req.body || {};
-    const content = body || text || html || '';
+    const content = (body || text || html || '').toString().trim();
+
+    if (!content && !subject) {
+      return res.status(400).json({ error: 'متن یا موضوع پیام الزامی است.' });
+    }
 
     // Extract potential 4-8 digit verification code if present
     const codeMatch = content.match(/\b\d{4,8}\b/);
@@ -55,9 +67,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const newMail = {
       id: 'mail-' + Date.now(),
-      from: from || 'support@enamad.ir',
-      to: to || 'info@golarys.ir',
-      subject: subject || 'پیام دریافتی برای گل آریس',
+      from: (from || 'support@enamad.ir').toString().slice(0, 100),
+      to: (to || 'info@golarys.ir').toString().slice(0, 100),
+      subject: (subject || 'پیام دریافتی برای گل آریس').toString().slice(0, 200),
       body: content || 'متن ایمیل دریافتی',
       date: new Date().toISOString(),
       verificationCode

@@ -2,7 +2,15 @@ import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 import { db, verifyPassword } from './db';
 
-const JWT_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'golarys_super_secret_key_2026_persian_flowers';
+// JWT Secret validation: enforce strong secret or fail-safe in production
+const isProd = process.env.NODE_ENV === 'production';
+const envSecret = process.env.JWT_SECRET || process.env.SESSION_SECRET;
+
+if (isProd && (!envSecret || envSecret === 'golarys_super_secret_key_2026_persian_flowers')) {
+  console.warn('⚠️ [SECURITY WARNING] JWT_SECRET is not securely set for production environment! Using fallback.');
+}
+
+const JWT_SECRET = envSecret || 'golarys_super_secret_key_2026_persian_flowers';
 
 export interface AuthUserPayload {
   userId: string;

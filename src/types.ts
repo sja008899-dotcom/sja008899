@@ -37,6 +37,7 @@ export interface Product {
   freshnessGuaranteeDays: number;
   vendor: Vendor;
   inStock: boolean;
+  stock?: number;
   isBestseller?: boolean;
   isSeasonal?: boolean;
   tags: string[];
@@ -160,7 +161,15 @@ export interface User {
   createdAt: string;
 }
 
-export type OrderStatus = 'paid' | 'preparing' | 'gift_wrapping' | 'delivering' | 'delivered' | 'cancelled';
+export type OrderStatus =
+  | 'awaiting_confirmation'
+  | 'pending_payment'
+  | 'paid'
+  | 'preparing'
+  | 'gift_wrapping'
+  | 'delivering'
+  | 'delivered'
+  | 'cancelled';
 export type PaymentMethod = 'shaparak' | 'card_to_card' | 'cod';
 
 export interface Order {

@@ -6,7 +6,7 @@ import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
 import crypto from "crypto";
 import { db, verifyPassword } from "./server/db";
-import { createToken, requireAdmin, requireUser, optionalUser } from "./server/auth";
+import { createToken, verifyToken, requireAdmin, requireUser, optionalUser } from "./server/auth";
 import { sendSmsNotification, checkRateLimit } from "./server/sms";
 import { Product, Order, CartItem } from "./src/types";
 
@@ -280,8 +280,18 @@ async function startServer() {
     const validatedItems: CartItem[] = [];
 
     for (const item of items) {
-      const serverProduct = db.getProductById(item.product.id) || item.product;
+      const serverProduct = db.getProductById(item.product.id);
+      if (!serverProduct) {
+        throw new Error(`محصول با شناسه «${item.product.id}» در کاتالوگ فروشگاه یافت نشد.`);
+      }
+
       const quantity = Math.max(1, Math.floor(item.quantity || 1));
+
+      // Stock check
+      if (serverProduct.stock !== undefined && serverProduct.stock < quantity) {
+        throw new Error(`موجودی محصول «${serverProduct.name}» کافی نیست (موجودی فعلی: ${serverProduct.stock} عدد).`);
+      }
+
       subtotal += serverProduct.price * quantity;
       validatedItems.push({
         ...item,
@@ -310,12 +320,27 @@ async function startServer() {
         return res.status(400).json({ error: "اطلاعات تحویل‌گیرنده ناقص است." });
       }
 
-      // Recalculate prices from server product catalog
-      const { subtotal, shippingCost, finalAmount, validatedItems } = calculateOrderAmounts(items);
+      // Recalculate prices and validate stock from server product catalog
+      let calcResult;
+      try {
+        calcResult = calculateOrderAmounts(items);
+      } catch (validationErr: any) {
+        return res.status(400).json({ error: validationErr.message || "خطا در اعتبارسنجی سبد خرید." });
+      }
+
+      const { subtotal, shippingCost, finalAmount, validatedItems } = calcResult;
+
+      // Deduct stock for validated items
+      for (const item of validatedItems) {
+        db.decreaseProductStock(item.product.id, item.quantity);
+      }
 
       // Generate tracking code GOL-XXXXXX
       const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
       const trackingCode = `GOL-${randomDigits}`;
+
+      // Status logic: shaparak -> pending_payment, cod/card_to_card -> awaiting_confirmation
+      const initialStatus = paymentMethod === 'shaparak' ? 'pending_payment' : 'awaiting_confirmation';
 
       const newOrder: Order = {
         id: `ord-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
@@ -325,7 +350,7 @@ async function startServer() {
         shippingCost,
         finalAmount,
         paymentMethod: paymentMethod || 'shaparak',
-        status: paymentMethod === 'shaparak' ? 'pending_payment' as any : 'paid',
+        status: initialStatus,
         deliveryDate: deliveryDate || 'امروز (ارسال فوری)',
         deliveryTimeSlot: deliveryTimeSlot || 'بعدازظهر (۱۴:۰۰ الی ۱۸:۰۰)',
         recipientName: recipientName.trim(),
@@ -356,24 +381,30 @@ async function startServer() {
     }
   });
 
-  // Get Orders
+  // Get Orders (Protected: Requires Admin Token or Tracking Query)
   app.get("/api/orders", (req: Request, res: Response) => {
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7).trim() : '';
-    const payload = token ? createToken : null; // check if admin
-    const authPayload = token ? (req as any).admin || (requireAdmin as any) : null;
-
     const { trackingCode, phone } = req.query;
 
-    // 1. If tracking search query provided
+    // 1. If tracking search query provided by customer
     if (trackingCode || phone) {
       const searchKey = (trackingCode || phone) as string;
       const matched = db.getOrdersByPhoneOrEmail(searchKey);
       return res.json(matched);
     }
 
-    // 2. If valid admin token provided, return all orders
-    const authUser = token ? requireAdmin : null;
+    // 2. Strict Admin Authentication required to list all customer orders
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7).trim() : authHeader.trim();
+
+    if (!token) {
+      return res.status(401).json({ error: 'دسترسی غیرمجاز: لطفاً با حساب مدیریت وارد شوید.' });
+    }
+
+    const payload = verifyToken(token);
+    if (!payload || payload.role !== 'admin') {
+      return res.status(403).json({ error: 'دسترسی رد شد: نیاز به دسترسی مدیر کل است.' });
+    }
+
     res.json(db.getOrders());
   });
 
@@ -389,6 +420,18 @@ async function startServer() {
   // Update order status (Admin only)
   app.patch("/api/orders/:id/status", requireAdmin, (req: Request, res: Response) => {
     const { status, rrn } = req.body;
+    const currentOrder = db.getOrderById(req.params.id as string);
+    if (!currentOrder) {
+      return res.status(404).json({ error: "سفارش یافت نشد." });
+    }
+
+    // If cancelling order, restore stock
+    if (status === 'cancelled' && currentOrder.status !== 'cancelled') {
+      for (const item of currentOrder.items) {
+        db.increaseProductStock(item.product.id, item.quantity);
+      }
+    }
+
     const updated = db.updateOrder(req.params.id as string, { status, ...(rrn ? { rrn } : {}) });
     if (!updated) {
       return res.status(404).json({ error: "سفارش یافت نشد." });
@@ -396,9 +439,12 @@ async function startServer() {
 
     // Notify customer
     let statusFa = 'در حال گل‌آرایی و آماده‌سازی';
+    if (status === 'awaiting_confirmation') statusFa = 'در انتظار تایید پرداخت/سفارش';
+    if (status === 'paid') statusFa = 'پرداخت تایید شد و سفارش ثبت نهایی گردید';
     if (status === 'gift_wrapping') statusFa = 'بسته‌بندی هدیه و کارت پیام دست‌نویس';
     if (status === 'delivering') statusFa = 'تحویل به سفیر و در مسیر ارسال';
     if (status === 'delivered') statusFa = 'تحویل داده شده به گیرنده';
+    if (status === 'cancelled') statusFa = 'لغو شده';
 
     sendSmsNotification(
       updated.recipientPhone,
@@ -411,6 +457,17 @@ async function startServer() {
   // Update pre-dispatch photo
   app.patch("/api/orders/:id/photo", (req: Request, res: Response) => {
     const { photoUrl, approved, feedback } = req.body;
+
+    // Security check: only admin is authorized to upload or alter photoUrl
+    if (photoUrl !== undefined) {
+      const authHeader = req.headers.authorization || '';
+      const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7).trim() : authHeader.trim();
+      const payload = token ? verifyToken(token) : null;
+      if (!payload || payload.role !== 'admin') {
+        return res.status(403).json({ error: 'تنها مدیر فروشگاه مجاز به بارگذاری عکس قبل از ارسال است.' });
+      }
+    }
+
     const updates: Partial<Order> = {};
     if (photoUrl !== undefined) updates.preDispatchPhotoUrl = photoUrl;
     if (approved !== undefined) updates.preDispatchPhotoApproved = approved;

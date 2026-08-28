@@ -25,6 +25,7 @@ import { NotificationsDrawer } from './components/NotificationsDrawer';
 import { ToastContainer } from './components/ToastContainer';
 import { SEOHead } from './components/SEOHead';
 import { HomeFAQSection } from './components/HomeFAQSection';
+import { HomeSeoContent } from './components/HomeSeoContent';
 import { SitemapModal } from './components/SitemapModal';
 
 const MainContent: React.FC = () => {
@@ -38,6 +39,7 @@ const MainContent: React.FC = () => {
           <HeroSection />
           <MarketplaceView />
           <HomeFAQSection />
+          <HomeSeoContent />
         </>
       )}
 

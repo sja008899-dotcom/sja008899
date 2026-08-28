@@ -6,10 +6,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { amount, description, callback_url, mobile, email } = req.body;
+  const { amount, description, callback_url, mobile, email, orderId } = req.body;
 
-  if (!amount || !description || !callback_url) {
-    return res.status(400).json({ error: "Amount, description, and callback_url are required." });
+  // Validate amount: must be positive integer and at least 1,000 Tomans
+  const parsedAmount = Number(amount);
+  if (!parsedAmount || isNaN(parsedAmount) || parsedAmount < 1000 || !Number.isInteger(parsedAmount)) {
+    return res.status(400).json({ error: "مبلغ ارسالی نامعتبر است. حداقل مبلغ مجاز ۱،۰۰۰ تومان می‌باشد." });
+  }
+
+  if (!description || !callback_url) {
+    return res.status(400).json({ error: "توضیحات و آدرس بازگشت (callback_url) الزامی است." });
   }
 
   const ZARINPAL_MERCHANT_ID = process.env.ZARINPAL_MERCHANT_ID || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
@@ -19,11 +25,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const zarinpalStartPayUrl = IS_SANDBOX ? 'https://sandbox.zarinpal.com/pg/StartPay' : 'https://www.zarinpal.com/pg/StartPay';
 
   try {
-    const amountInRial = amount * 10;
+    const amountInRial = parsedAmount * 10;
     const payload = {
       merchant_id: ZARINPAL_MERCHANT_ID,
       amount: amountInRial,
-      description,
+      description: description || (orderId ? `پرداخت سفارش ${orderId}` : 'خرید از گل آریس'),
       callback_url,
       metadata: { mobile: mobile || "", email: email || "" }
     };
@@ -35,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (response.data.data && response.data.data.code === 100) {
       const authority = response.data.data.authority;
       const paymentUrl = `${zarinpalStartPayUrl}/${authority}`;
-      res.json({ authority, paymentUrl });
+      res.json({ authority, paymentUrl, orderId });
     } else {
       res.status(400).json({ error: "Failed to create payment token", details: response.data.errors });
     }

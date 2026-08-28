@@ -143,9 +143,15 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(raw);
+        const rawProducts: Product[] = parsed.products || sampleProducts;
+        const productsWithStock = rawProducts.map((p) => ({
+          ...p,
+          stock: p.stock !== undefined ? p.stock : 20
+        }));
+
         // Ensure all required top-level keys exist
         return {
-          products: parsed.products || sampleProducts,
+          products: productsWithStock,
           orders: parsed.orders || initialDatabase.orders,
           blogPosts: parsed.blogPosts || sampleBlogPosts,
           siteContent: parsed.siteContent || initialSiteContent,
@@ -163,18 +169,34 @@ class Database {
     return initialDatabase;
   }
 
+  private isWriting = false;
+  private writeQueue: (() => void)[] = [];
+
   public save(newData?: DatabaseSchema) {
     if (newData) {
       this.data = newData;
     }
     this.ensureDirectory();
+
+    if (this.isWriting) {
+      this.writeQueue.push(() => this.save());
+      return;
+    }
+
+    this.isWriting = true;
     try {
       // Atomic write using temporary file
-      const tempFile = `${DB_FILE}.tmp.${Date.now()}`;
+      const tempFile = `${DB_FILE}.tmp.${Date.now()}.${Math.random().toString(36).substring(2, 6)}`;
       fs.writeFileSync(tempFile, JSON.stringify(this.data, null, 2), 'utf-8');
       fs.renameSync(tempFile, DB_FILE);
     } catch (err) {
       console.error('Error saving db.json:', err);
+    } finally {
+      this.isWriting = false;
+      if (this.writeQueue.length > 0) {
+        const nextWrite = this.writeQueue.shift();
+        if (nextWrite) nextWrite();
+      }
     }
   }
 
@@ -188,6 +210,9 @@ class Database {
   }
 
   public addProduct(product: Product): Product {
+    if (product.stock === undefined) {
+      product.stock = 20;
+    }
     this.data.products.unshift(product);
     this.save();
     return product;
@@ -199,6 +224,31 @@ class Database {
     this.data.products[idx] = { ...this.data.products[idx], ...updates };
     this.save();
     return this.data.products[idx];
+  }
+
+  public decreaseProductStock(productId: string, quantity: number): boolean {
+    const product = this.data.products.find((p) => p.id === productId || p.slug === productId);
+    if (!product) return false;
+    const currentStock = product.stock !== undefined ? product.stock : 20;
+    const newStock = Math.max(0, currentStock - quantity);
+    product.stock = newStock;
+    if (newStock === 0) {
+      product.inStock = false;
+    }
+    this.save();
+    return true;
+  }
+
+  public increaseProductStock(productId: string, quantity: number): boolean {
+    const product = this.data.products.find((p) => p.id === productId || p.slug === productId);
+    if (!product) return false;
+    const currentStock = product.stock !== undefined ? product.stock : 0;
+    product.stock = currentStock + quantity;
+    if (product.stock > 0) {
+      product.inStock = true;
+    }
+    this.save();
+    return true;
   }
 
   public deleteProduct(id: string): boolean {

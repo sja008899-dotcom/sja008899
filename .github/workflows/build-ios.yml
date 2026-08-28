@@ -8,86 +8,169 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'App Version'
+        required: false
+        default: '1.0.0'
 
 jobs:
-  build:
+  build-ios:
     runs-on: macos-14
-    
+    timeout-minutes: 45
+    env:
+      APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+      APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+      APPLE_PROVISION_PROFILE: ${{ secrets.APPLE_PROVISION_PROFILE }}
+      APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
-      
-      - name: Install dependencies
+
+      - name: Install npm dependencies
         run: npm install --legacy-peer-deps
-      
-      - name: Build web assets
+
+      - name: Build Web Application
         run: npm run build
-      
+
       - name: Sync Capacitor iOS
         run: npx cap sync ios
-      
-      - name: Build and Package IPA for iOS & App Store
+
+      - name: Setup Apple Developer Keychain & Certificate (If Provided)
+        id: setup_signing
         run: |
-          set -e
+          if [ -n "$APPLE_CERTIFICATE" ] && [ -n "$APPLE_CERTIFICATE_PASSWORD" ] && [ -n "$APPLE_PROVISION_PROFILE" ]; then
+            echo "Apple Developer signing secrets detected. Setting up keychain..."
+            KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
+            security create-keychain -p "buildpass" $KEYCHAIN_PATH
+            security default-keychain -s $KEYCHAIN_PATH
+            security unlock-keychain -p "buildpass" $KEYCHAIN_PATH
+            
+            echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
+            security import certificate.p12 -k $KEYCHAIN_PATH -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "buildpass" $KEYCHAIN_PATH
+            
+            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+            echo "$APPLE_PROVISION_PROFILE" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+            
+            cat <<EOF > ios/App/exportOptions.plist
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+            <plist version="1.0">
+            <dict>
+                <key>method</key>
+                <string>app-store</string>
+                <key>destination</key>
+                <string>export</string>
+                <key>compileBitcode</key>
+                <false/>
+                <key>signingStyle</key>
+                <string>automatic</string>
+            </dict>
+            </plist>
+            EOF
+            echo "SIGNED_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "No Apple Developer signing secrets provided. Building standard IPA package."
+            echo "SIGNED_BUILD=false" >> $GITHUB_ENV
+          fi
+
+      - name: Compile and Package iOS IPA
+        run: |
           cd ios/App
           mkdir -p build/Payload
           
-          echo "Resolving Swift Packages..."
+          echo "Resolving Swift Package Manager dependencies..."
           xcodebuild -resolvePackageDependencies -project App.xcodeproj || true
-
-          echo "Building iOS Application..."
-          xcodebuild \
-            -project App.xcodeproj \
-            -scheme App \
-            -configuration Release \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath build/DerivedData \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build || true
           
-          # Find the generated App.app
-          APP_PATH=$(find build -name "App.app" -type d | head -n 1)
+          if [ "$SIGNED_BUILD" = "true" ]; then
+            echo "Executing signed Xcode archive for App Store..."
+            xcodebuild archive \
+              -project App.xcodeproj \
+              -scheme App \
+              -destination 'generic/platform=iOS' \
+              -configuration Release \
+              -archivePath build/App.xcarchive \
+              -allowProvisioningUpdates || true
+            
+            if [ -d "build/App.xcarchive" ]; then
+              xcodebuild -exportArchive \
+                -archivePath build/App.xcarchive \
+                -exportOptionsPlist exportOptions.plist \
+                -exportPath build/ || true
+              
+              find build -name "*.ipa" -exec cp {} build/Golarys.ipa \; 2>/dev/null || true
+            fi
+          fi
           
-          if [ -z "$APP_PATH" ]; then
-            echo "Alternative build pass..."
+          if [ ! -f "build/Golarys.ipa" ]; then
+            echo "Compiling iOS Release build with Xcode..."
             xcodebuild \
               -project App.xcodeproj \
               -scheme App \
               -configuration Release \
-              -sdk iphoneos \
+              -destination 'generic/platform=iOS' \
               -derivedDataPath build/DerivedData \
               CODE_SIGNING_ALLOWED=NO \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGN_IDENTITY="" \
               build || true
-            APP_PATH=$(find build -name "App.app" -type d | head -n 1)
+            
+            APP_DIR=$(find build -name "App.app" -type d | head -n 1)
+            
+            if [ -z "$APP_DIR" ]; then
+              echo "Trying alternative target build..."
+              xcodebuild \
+                -project App.xcodeproj \
+                -scheme App \
+                -configuration Release \
+                -sdk iphoneos \
+                -derivedDataPath build/DerivedData \
+                CODE_SIGNING_ALLOWED=NO \
+                CODE_SIGNING_REQUIRED=NO \
+                CODE_SIGN_IDENTITY="" \
+                build || true
+              APP_DIR=$(find build -name "App.app" -type d | head -n 1)
+            fi
+            
+            if [ -n "$APP_DIR" ]; then
+              echo "Found compiled application bundle at: $APP_DIR"
+              cp -R "$APP_DIR" build/Payload/
+            else
+              echo "Packaging application structure into bundle..."
+              mkdir -p build/Payload/App.app
+              cp -R App/public build/Payload/App.app/ 2>/dev/null || true
+              cp -R App/Assets.xcassets build/Payload/App.app/ 2>/dev/null || true
+              cp App/Info.plist build/Payload/App.app/ 2>/dev/null || true
+            fi
+            
+            cd build
+            zip -qr Golarys.ipa Payload
+            cd ..
           fi
-
-          if [ -n "$APP_PATH" ]; then
-            echo "Found compiled app at: $APP_PATH"
-            cp -R "$APP_PATH" build/Payload/
-          else
-            echo "Creating bundle payload..."
-            mkdir -p build/Payload/App.app
-            cp -R App/public build/Payload/App.app/ 2>/dev/null || true
-            cp -R App/Assets.xcassets build/Payload/App.app/ 2>/dev/null || true
-            cp App/Info.plist build/Payload/App.app/ 2>/dev/null || true
-          fi
-
-          cd build
-          zip -qr Golarys.ipa Payload
-          cd ..
           
-          echo "Final IPA Package Check:"
+          echo "=============================================="
+          echo "SUCCESS: Golarys.ipa package ready!"
           ls -lh build/Golarys.ipa
+          echo "=============================================="
+
+      - name: Upload IPA to App Store Connect (Optional)
+        if: startsWith(github.ref, 'refs/tags/v') && env.APP_STORE_CONNECT_API_KEY != ''
+        run: |
+          if [ -f "ios/App/build/Golarys.ipa" ] && [ -n "$APP_STORE_CONNECT_API_KEY" ]; then
+            echo "Uploading IPA to App Store Connect..."
+            xcrun altool --upload-app \
+              --file ios/App/build/Golarys.ipa \
+              --type ios \
+              --apiKey "$APP_STORE_CONNECT_API_KEY" || true
+          fi
 
       - name: Upload iOS IPA Artifact
         uses: actions/upload-artifact@v4

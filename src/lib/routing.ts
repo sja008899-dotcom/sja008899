@@ -27,7 +27,11 @@ export function getPathForProduct(slug: string): string {
   return `/product/${slug}`;
 }
 
-export function parseRoute(pathname: string): { tab: ActiveTab; productSlug?: string } {
+export function getPathForBlogArticle(slug: string): string {
+  return `/blog/${slug}`;
+}
+
+export function parseRoute(pathname: string): { tab: ActiveTab; productSlug?: string; blogSlug?: string } {
   const cleanPath = pathname.replace(/\/+$/, '') || '/';
 
   if (cleanPath === '/' || cleanPath === '') {
@@ -53,6 +57,15 @@ export function parseRoute(pathname: string): { tab: ActiveTab; productSlug?: st
   }
   if (cleanPath === '/admin' || cleanPath === '/panel') {
     return { tab: 'admin' };
+  }
+
+  // Check /blog/:slug
+  const blogMatch = cleanPath.match(/^\/blog\/([^/]+)/);
+  if (blogMatch) {
+    return {
+      tab: 'blog',
+      blogSlug: decodeURIComponent(blogMatch[1])
+    };
   }
 
   // Check /product/:slug

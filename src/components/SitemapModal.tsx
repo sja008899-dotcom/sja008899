@@ -23,7 +23,7 @@ interface SitemapModalProps {
 }
 
 export const SitemapModal: React.FC<SitemapModalProps> = ({ isOpen, onClose }) => {
-  const { siteContent, products, blogPosts, setActiveTab, setSelectedCategory, setQuickViewProduct, showToast } = useApp();
+  const { siteContent, products, blogPosts, setActiveTab, setSelectedCategory, setQuickViewProduct, setSelectedBlogArticle, showToast } = useApp();
   const [activeTabType, setActiveTabType] = useState<'visual' | 'xml' | 'robots' | 'schema'>('visual');
   const [copied, setCopied] = useState(false);
 
@@ -254,6 +254,42 @@ Sitemap: https://golarys.ir/sitemap.xml
                       </button>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Blog Articles */}
+              <div>
+                <h4 className="text-xs font-black text-stone-500 uppercase tracking-wider mb-3">
+                  مقالات و راهنماهای تخصصی مجله گل آریس:
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {blogPosts.map((b) => (
+                    <div
+                      key={b.id}
+                      onClick={() => {
+                        setActiveTab('blog');
+                        setSelectedBlogArticle(b);
+                        onClose();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="p-2.5 bg-stone-50 hover:bg-emerald-50/50 border border-stone-200 hover:border-[#2D5A27] rounded-xl flex items-center justify-between transition-colors cursor-pointer group"
+                    >
+                      <div className="flex items-center gap-2 overflow-hidden">
+                        <img src={b.image} alt={b.title} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
+                        <div className="truncate">
+                          <div className="text-xs font-bold text-stone-800 group-hover:text-[#2D5A27] truncate">
+                            {b.title}
+                          </div>
+                          <div className="text-[10px] text-stone-400 font-mono truncate" dir="ltr">
+                            /blog/{b.slug}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-stone-500 flex-shrink-0 font-medium mr-2">
+                        {b.readTime}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 

@@ -69,7 +69,7 @@ export const AdminPanel: React.FC = () => {
 
   const [passwordInput, setPasswordInput] = useState('');
   const [showLockPass, setShowLockPass] = useState(false);
-  const [activeSubTab, setActiveSubTab] = useState<'inbox_messages' | 'orders_manager' | 'content_editor' | 'add_product' | 'add_blog' | 'security_settings' | 'corporate_email' | 'decap_cms' | 'zip_builder' | 'github_sync'>('inbox_messages');
+  const [activeSubTab, setActiveSubTab] = useState<'inbox_messages' | 'orders_manager' | 'content_editor' | 'add_product' | 'add_blog' | 'security_settings' | 'corporate_email' | 'decap_cms' | 'mobile_app' | 'zip_builder' | 'github_sync'>('inbox_messages');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [messageFilter, setMessageFilter] = useState<'all' | 'unread'>('all');
   const [replyText, setReplyText] = useState('');

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useApp } from '../context/AppContext';
 import { BlogPost } from '../types';
 import { 
@@ -13,7 +15,8 @@ import {
   Stethoscope, 
   HelpCircle,
   CheckCircle2,
-  Flower2
+  Flower2,
+  Share2
 } from 'lucide-react';
 import { toPersianDigits } from '../lib/formatters';
 
@@ -222,49 +225,150 @@ export const BlogView: React.FC = () => {
 
       {/* 4. Article Reader Modal */}
       {selectedBlogArticle && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
+        <div 
+          id="article-reader-modal"
+          className="fixed inset-0 z-50 overflow-y-auto bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setSelectedBlogArticle(null)}
+        >
           <div 
-            className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden border border-stone-200 relative animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col"
+            id="article-reader-dialog"
+            className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden border border-stone-200 relative animate-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="p-6 border-b border-stone-200 flex items-center justify-between bg-stone-50">
-              <div className="flex items-center gap-2 text-xs text-stone-500">
-                <span>{selectedBlogArticle.date}</span>
+            <div className="p-4 sm:p-6 border-b border-stone-200 flex items-center justify-between bg-stone-50">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-stone-600">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                  {toPersianDigits(selectedBlogArticle.date)}
+                </span>
                 <span>•</span>
-                <span>{selectedBlogArticle.author}</span>
+                <span className="flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-stone-400" />
+                  {selectedBlogArticle.author}
+                </span>
                 <span>•</span>
-                <span className="text-[#2D5A27] font-bold">{selectedBlogArticle.readTime}</span>
+                <span className="flex items-center gap-1 text-[#2D5A27] font-bold">
+                  <Clock className="w-3.5 h-3.5" />
+                  {selectedBlogArticle.readTime}
+                </span>
               </div>
 
-              <button
-                onClick={() => setSelectedBlogArticle(null)}
-                className="p-2 rounded-full bg-white hover:bg-stone-200 text-stone-700 shadow-xs cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  id="share-article-button"
+                  onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('لینک مقاله در حافظه کپی شد!');
+                    }
+                  }}
+                  className="p-2 rounded-full bg-white hover:bg-stone-200 text-stone-600 shadow-xs cursor-pointer transition-colors"
+                  title="کپی لینک مقاله"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+
+                <button
+                  id="close-article-modal-button"
+                  onClick={() => setSelectedBlogArticle(null)}
+                  className="p-2 rounded-full bg-white hover:bg-stone-200 text-stone-700 shadow-xs cursor-pointer transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Article Content */}
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-              <div className="h-64 rounded-2xl overflow-hidden shadow-inner">
+            <div className="p-6 sm:p-10 overflow-y-auto space-y-8">
+              {/* Featured Image */}
+              <div className="h-64 sm:h-80 rounded-2xl overflow-hidden shadow-inner relative">
                 <img
                   src={selectedBlogArticle.image}
                   alt={selectedBlogArticle.title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-black text-[#1F3F1B] font-heading leading-tight">
-                {selectedBlogArticle.title}
-              </h2>
-
-              <div className="prose prose-stone max-w-none text-xs sm:text-sm text-stone-700 leading-loose space-y-4 whitespace-pre-wrap">
-                {selectedBlogArticle.content}
+              {/* Title & Excerpt */}
+              <div className="space-y-4">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1F3F1B] font-heading leading-snug">
+                  {selectedBlogArticle.title}
+                </h1>
+                {selectedBlogArticle.excerpt && (
+                  <p className="text-sm sm:text-base text-stone-600 bg-stone-50 p-4 rounded-xl border-r-4 border-[#2D5A27] leading-relaxed">
+                    {selectedBlogArticle.excerpt}
+                  </p>
+                )}
               </div>
 
-              <div className="pt-6 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap gap-1.5">
+              {/* Markdown Body */}
+              <div className="markdown-body text-stone-800 text-sm sm:text-base leading-relaxed space-y-5">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h2: ({ node, ...props }) => (
+                      <h2 className="text-xl sm:text-2xl font-bold text-[#1F3F1B] pt-6 pb-2 border-b border-stone-100 font-heading" {...props} />
+                    ),
+                    h3: ({ node, ...props }) => (
+                      <h3 className="text-lg sm:text-xl font-bold text-[#2D5A27] pt-4 pb-1" {...props} />
+                    ),
+                    p: ({ node, ...props }) => (
+                      <p className="text-stone-700 leading-loose" {...props} />
+                    ),
+                    ul: ({ node, ...props }) => (
+                      <ul className="list-disc list-inside space-y-2 pr-2 text-stone-700 my-4" {...props} />
+                    ),
+                    ol: ({ node, ...props }) => (
+                      <ol className="list-decimal list-inside space-y-2 pr-2 text-stone-700 my-4" {...props} />
+                    ),
+                    li: ({ node, ...props }) => (
+                      <li className="text-stone-700 leading-relaxed" {...props} />
+                    ),
+                    blockquote: ({ node, ...props }) => (
+                      <blockquote className="border-r-4 border-[#D4AF37] bg-amber-50/60 p-4 rounded-xl text-stone-800 my-4 italic" {...props} />
+                    ),
+                    table: ({ node, ...props }) => (
+                      <div className="overflow-x-auto my-6 border border-stone-200 rounded-2xl shadow-xs">
+                        <table className="w-full text-right text-xs sm:text-sm divide-y divide-stone-200" {...props} />
+                      </div>
+                    ),
+                    thead: ({ node, ...props }) => (
+                      <thead className="bg-[#1F3F1B]/5 text-[#1F3F1B] font-bold" {...props} />
+                    ),
+                    th: ({ node, ...props }) => (
+                      <th className="px-4 py-3 text-stone-900 font-bold" {...props} />
+                    ),
+                    td: ({ node, ...props }) => (
+                      <td className="px-4 py-3 border-t border-stone-100 text-stone-700" {...props} />
+                    ),
+                    img: ({ node, alt, title, ...props }) => (
+                      <figure className="my-6 rounded-2xl overflow-hidden border border-stone-200 shadow-sm">
+                        <img className="w-full h-auto object-cover max-h-96" alt={alt || ''} {...props} />
+                        {(title || alt) && (
+                          <figcaption className="p-2.5 text-center text-xs text-stone-500 bg-stone-50 border-t border-stone-100">
+                            {title || alt}
+                          </figcaption>
+                        )}
+                      </figure>
+                    ),
+                    hr: ({ node, ...props }) => (
+                      <hr className="my-8 border-stone-200" {...props} />
+                    ),
+                    strong: ({ node, ...props }) => (
+                      <strong className="font-bold text-[#1F3F1B]" {...props} />
+                    ),
+                  }}
+                >
+                  {selectedBlogArticle.content}
+                </ReactMarkdown>
+              </div>
+
+              {/* Tags & Action Footer */}
+              <div className="pt-6 border-t border-stone-200 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <Tag className="w-4 h-4 text-stone-400 ml-1" />
                   {selectedBlogArticle.tags.map((t) => (
                     <span key={t} className="text-xs bg-stone-100 text-stone-700 px-3 py-1 rounded-lg font-medium">
                       #{t}
@@ -273,13 +377,15 @@ export const BlogView: React.FC = () => {
                 </div>
 
                 <button
+                  id="browse-marketplace-from-article"
                   onClick={() => {
                     setSelectedBlogArticle(null);
                     setActiveTab('marketplace');
                   }}
-                  className="px-4 py-2 bg-[#2D5A27] text-white font-bold text-xs rounded-xl cursor-pointer"
+                  className="px-5 py-2.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer flex items-center gap-2"
                 >
-                  مشاهده گل‌های مرتبط
+                  <Flower2 className="w-4 h-4 text-[#D4AF37]" />
+                  <span>مشاهده و خرید گل‌های مرتبط در بازار</span>
                 </button>
               </div>
             </div>

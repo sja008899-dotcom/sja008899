@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { ActiveTab, Product } from '../types';
+import { ActiveTab, Product, BlogPost } from '../types';
 
 interface SEOHeadProps {
   activeTab: ActiveTab;
   selectedProduct?: Product | null;
+  selectedBlogArticle?: BlogPost | null;
 }
 
-export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) => {
+export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct, selectedBlogArticle }) => {
   useEffect(() => {
     // 1. Dynamic Title & Description configuration for high SEO ranking
     let pageTitle = 'گل آریس | بازار آنلاین گل و گیاه ایران و گلفروشی آنلاین (Golarys)';
@@ -14,7 +15,12 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
     let canonicalUrl = 'https://golarys.ir/';
     let ogImage = 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=1200&h=630&q=85';
 
-    if (selectedProduct) {
+    if (selectedBlogArticle) {
+      pageTitle = `${selectedBlogArticle.title} | مجله باغبانی گل آریس`;
+      metaDescription = selectedBlogArticle.excerpt;
+      canonicalUrl = `https://golarys.ir/blog/${selectedBlogArticle.slug}`;
+      ogImage = selectedBlogArticle.image;
+    } else if (selectedProduct) {
       pageTitle = `خرید آنلاین ${selectedProduct.name} (${selectedProduct.nameEn}) | گلفروشی آنلاین گل آریس`;
       metaDescription = `${selectedProduct.description} - قیمت: ${selectedProduct.price.toLocaleString('fa-IR')} تومان. خرید از بازار گل ایران، ارسال فوری اسنپ، عکس گل قبل از ارسال و ضمانت شادابی ۷ روزه.`;
       canonicalUrl = `https://golarys.ir/product/${selectedProduct.slug}`;
@@ -94,7 +100,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
     let canonicalTag = document.querySelector('link[rel="canonical"]');
     if (canonicalTag) canonicalTag.setAttribute('href', canonicalUrl);
 
-    // Dynamic JSON-LD Schema for Product / Page
+    // Dynamic JSON-LD Schema for Article / Product / Page
     let scriptTag = document.getElementById('dynamic-page-schema');
     if (!scriptTag) {
       scriptTag = document.createElement('script');
@@ -103,7 +109,35 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
       document.head.appendChild(scriptTag);
     }
 
-    if (selectedProduct) {
+    if (selectedBlogArticle) {
+      const articleSchema: any = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": selectedBlogArticle.title,
+        "image": [selectedBlogArticle.image],
+        "datePublished": "2026-08-28T00:00:00+03:30",
+        "dateModified": "2026-08-28T00:00:00+03:30",
+        "author": {
+          "@type": "Organization",
+          "name": selectedBlogArticle.author || "گل آریس (Golarys)"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "گل آریس (Golarys)",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://golarys.ir/favicon.ico"
+          }
+        },
+        "description": selectedBlogArticle.excerpt,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalUrl
+        },
+        "keywords": selectedBlogArticle.tags.join(", ")
+      };
+      scriptTag.textContent = JSON.stringify(articleSchema);
+    } else if (selectedProduct) {
       const productSchema: any = {
         "@context": "https://schema.org/",
         "@type": "Product",
@@ -160,7 +194,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct }) 
       };
       scriptTag.textContent = JSON.stringify(breadcrumbSchema);
     }
-  }, [activeTab, selectedProduct]);
+  }, [activeTab, selectedProduct, selectedBlogArticle]);
 
   return null;
 };

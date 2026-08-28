@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Product, CartItem, SiteContent, ActiveTab, BlogPost, User, Order, OrderStatus, DispatchedNotification, ContactMessage } from '../types';
 import { initialSiteContent, sampleProducts, sampleBlogPosts } from '../data/initialContent';
-import { parseRoute, getPathForTab, getPathForProduct } from '../lib/routing';
+import { parseRoute, getPathForTab, getPathForProduct, getPathForBlogArticle } from '../lib/routing';
 import confetti from 'canvas-confetti';
 
 interface Toast {
@@ -144,7 +144,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [searchQuery, setSearchQuery] = useState('');
   const [quickViewProduct, setQuickViewProductState] = useState<Product | null>(null);
   const [selectedProduct, setSelectedProductState] = useState<Product | null>(null);
-  const [selectedBlogArticle, setSelectedBlogArticle] = useState<BlogPost | null>(null);
+  const [selectedBlogArticle, setSelectedBlogArticleState] = useState<BlogPost | null>(null);
+
+  const setSelectedBlogArticle = useCallback((post: BlogPost | null) => {
+    setSelectedBlogArticleState(post);
+    if (post) {
+      const newPath = getPathForBlogArticle(post.slug);
+      if (window.location.pathname !== newPath) {
+        window.history.pushState({ blogSlug: post.slug }, '', newPath);
+      }
+    } else {
+      const currentTabPath = getPathForTab(activeTab);
+      if (window.location.pathname.startsWith('/blog/')) {
+        window.history.pushState({}, '', currentTabPath);
+      }
+    }
+  }, [activeTab]);
   const [isGiftBuilderOpen, setIsGiftBuilderOpen] = useState(false);
   const [language, setLanguage] = useState<'fa' | 'en'>('fa');
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -294,7 +309,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Handle browser back/forward buttons (popstate)
   useEffect(() => {
     const handlePopState = () => {
-      const { tab, productSlug } = parseRoute(window.location.pathname);
+      const { tab, productSlug, blogSlug } = parseRoute(window.location.pathname);
       setActiveTabState(tab);
       if (productSlug) {
         const found = products.find((p) => p.slug === productSlug || p.id === productSlug);
@@ -306,13 +321,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setQuickViewProductState(null);
         setSelectedProductState(null);
       }
+
+      if (blogSlug) {
+        const foundArticle = blogPosts.find((b) => b.slug === blogSlug || b.id === blogSlug);
+        if (foundArticle) {
+          setSelectedBlogArticleState(foundArticle);
+        }
+      } else {
+        setSelectedBlogArticleState(null);
+      }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [products]);
+  }, [products, blogPosts]);
 
-  // Initial product route check once products load
+  // Initial product & blog route check once data loads
   useEffect(() => {
     if (initialRoute.productSlug && products.length > 0) {
       const found = products.find((p) => p.slug === initialRoute.productSlug || p.id === initialRoute.productSlug);
@@ -321,7 +345,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedProductState(found);
       }
     }
-  }, [products]);
+    if (initialRoute.blogSlug && blogPosts.length > 0) {
+      const foundArticle = blogPosts.find((b) => b.slug === initialRoute.blogSlug || b.id === initialRoute.blogSlug);
+      if (foundArticle) {
+        setSelectedBlogArticleState(foundArticle);
+      }
+    }
+  }, [products, blogPosts]);
 
   // Handle Zarinpal Payment Verification Callback
   useEffect(() => {

@@ -29,11 +29,11 @@ import { HomeSeoContent } from './components/HomeSeoContent';
 import { SitemapModal } from './components/SitemapModal';
 
 const MainContent: React.FC = () => {
-  const { activeTab, selectedProduct } = useApp();
+  const { activeTab, selectedProduct, selectedBlogArticle } = useApp();
 
   return (
     <main className="min-h-[calc(100vh-200px)]">
-      <SEOHead activeTab={activeTab} selectedProduct={selectedProduct} />
+      <SEOHead activeTab={activeTab} selectedProduct={selectedProduct} selectedBlogArticle={selectedBlogArticle} />
       {activeTab === 'home' && (
         <>
           <HeroSection />

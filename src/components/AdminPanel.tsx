@@ -1741,14 +1741,44 @@ echo "Done. Created \${OUT}"`}
       {/* 7. Mobile App Builder Sub-Tab */}
       {activeSubTab === 'mobile_app' && (
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-md space-y-6">
-          <div className="border-b border-stone-100 pb-3">
-            <h3 className="text-xl font-bold text-[#1F3F1B] font-heading flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-[#D4AF37]" />
-              <span>ساخت و دانلود اپلیکیشن موبایل (اندروید و iOS)</span>
-            </h3>
-            <p className="text-xs text-stone-500 mt-1">
-              پروژه شما به سیستم قدرتمند Capacitor مجهز شده و کدهای بومی اپلیکیشن‌های اندروید و اپل آن مستقیماً در گیت‌هاب سایتتان ذخیره شده است.
-            </p>
+          <div className="border-b border-stone-100 pb-3 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-bold text-[#1F3F1B] font-heading flex items-center gap-2">
+                <Smartphone className="w-5 h-5 text-[#D4AF37]" />
+                <span>مدیریت و انتشار اپلیکیشن موبایل (Android & iOS)</span>
+              </h3>
+              <p className="text-xs text-stone-500 mt-1">
+                پروژه گل آریس به سیستم Capacitor و پکیج بومی Android با امضا اختصاصی Keystore و آیکون رسمی فروشگاه‌های اپلیکیشن مجهز شده است.
+              </p>
+            </div>
+            <a 
+              href="/golarys-play-store-icon-512.png" 
+              download="golarys-play-store-icon-512.png"
+              className="px-4 py-2 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-xs"
+            >
+              <DownloadCloud className="w-4 h-4 text-[#D4AF37]" />
+              <span>دانلود آیکون رسمی (512x512)</span>
+            </a>
+          </div>
+
+          {/* Official Store Icon Card */}
+          <div className="bg-gradient-to-l from-emerald-900 via-[#1F3F1B] to-[#17361A] text-white p-5 rounded-2xl flex flex-col sm:flex-row items-center gap-5 shadow-sm border border-emerald-800">
+            <div className="relative shrink-0">
+              <img 
+                src="/golarys-play-store-icon-512.png" 
+                alt="Golarys Official App Icon" 
+                className="w-24 h-24 rounded-2xl shadow-xl border-2 border-[#D4AF37]/50 object-cover"
+              />
+              <span className="absolute -bottom-2 -right-2 bg-[#D4AF37] text-stone-950 font-black text-[10px] px-2 py-0.5 rounded-full shadow-md">
+                512×512
+              </span>
+            </div>
+            <div className="space-y-1.5 text-center sm:text-right">
+              <h4 className="font-bold text-base text-[#D4AF37]">آیکون استاندارد گوگل‌پلی و کافه‌بازار (Hi-Res Icon)</h4>
+              <p className="text-xs text-stone-200 leading-relaxed max-w-xl">
+                لوگوی جدید گل آریس با نشان زنبق طلایی و زمینه سبز لوکس بر روی تمامی ابعاد لانچر اندروید (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)، وب اپلیکیشن پیشرونده (PWA) و متاتگ‌های استور اعمال گردیده است.
+              </p>
+            </div>
           </div>
 
           <div className="bg-indigo-50 border border-indigo-200 p-5 rounded-2xl flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -1763,7 +1793,7 @@ echo "Done. Created \${OUT}"`}
             </div>
             <button 
               onClick={() => setActiveSubTab('zip_builder')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0 whitespace-nowrap text-center"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0 whitespace-nowrap text-center cursor-pointer"
             >
               مراحل دانلود سورس<br/>
               <span className="text-[10px] opacity-80 font-normal">کاملاً اختصاصی و White-label</span>
@@ -1779,9 +1809,10 @@ echo "Done. Created \${OUT}"`}
                 <h4 className="font-bold text-stone-800">خروجی اندروید (Android)</h4>
               </div>
               <ul className="text-xs text-stone-600 space-y-2 list-disc list-inside">
+                <li>پکیج بومی: <strong className="text-green-800 font-mono" dir="ltr">ir.golarys.app</strong></li>
                 <li>ساخت فایل <strong className="text-green-700 font-mono">.aab</strong> استاندارد برای گوگل پلی و مایکت</li>
-                <li>ساخت فایل <strong className="text-green-700 font-mono">.apk</strong> برای دانلود مستقیم سایت و کانال تلگرام</li>
-                <li>کدنویسی شده با Java و Kotlin بومی</li>
+                <li>ساخت فایل <strong className="text-green-70 مfont-mono">.apk</strong> برای دانلود مستقیم سایت و کافه‌بازار</li>
+                <li>مجهز به فایل راهنمای امضای بسته <code className="font-mono bg-stone-100 px-1 py-0.5 rounded">android-signing-instructions.md</code></li>
               </ul>
             </div>
 
@@ -1793,9 +1824,9 @@ echo "Done. Created \${OUT}"`}
                 <h4 className="font-bold text-stone-800">خروجی اپل (iOS)</h4>
               </div>
               <ul className="text-xs text-stone-600 space-y-2 list-disc list-inside">
-                <li>ساخت فایل <strong className="text-stone-700 font-mono">.ipa</strong> برای انتشار در App Store و سیب اپ</li>
-                <li>طراحی یکپارچه بر اساس کدهای Swift</li>
-                <li>نیازمند اتصال به اکانت توسعه‌دهنده Apple در Appflow</li>
+                <li>پکیج بومی: <strong className="text-stone-800 font-mono" dir="ltr">ir.golarys.app</strong></li>
+                <li>ساخت فایل <strong className="text-stone-700 font-mono">.ipa</strong> برای انتشار در App Store، سیب اپ و اناردونی</li>
+                <li>طراحی یکپارچه بر اساس کدهای Swift و سازگار با iOS 16+</li>
               </ul>
             </div>
           </div>

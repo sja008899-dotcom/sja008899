@@ -67,41 +67,52 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
           className="shrink-0 transition-transform duration-300 group-hover:scale-105"
         >
           <defs>
-            <linearGradient id="goldGradFallback" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#F5D77F" />
-              <stop offset="40%" stopColor="#D4AF37" />
-              <stop offset="100%" stopColor="#997A1E" />
+            <linearGradient id="goldCenterPetalFallback" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" stopColor="#F6DA77" />
+              <stop offset="50%" stopColor="#D9A833" />
+              <stop offset="100%" stopColor="#B37E18" />
             </linearGradient>
-            <linearGradient id="emeraldGradFallback" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3E7B35" />
-              <stop offset="100%" stopColor="#172E14" />
+            <linearGradient id="goldLeftPetalFallback" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#F5D875" />
+              <stop offset="50%" stopColor="#D8A531" />
+              <stop offset="100%" stopColor="#A87313" />
             </linearGradient>
+            <linearGradient id="goldRightPetalFallback" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#F5D875" />
+              <stop offset="50%" stopColor="#D8A531" />
+              <stop offset="100%" stopColor="#A87313" />
+            </linearGradient>
+            <linearGradient id="goldStemFallback" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" stopColor="#E5B943" />
+              <stop offset="50%" stopColor="#CE9925" />
+              <stop offset="100%" stopColor="#96640E" />
+            </linearGradient>
+            <linearGradient id="emeraldLeftFallback" x1="30%" y1="20%" x2="80%" y2="85%">
+              <stop offset="0%" stopColor="#38773C" />
+              <stop offset="50%" stopColor="#2A5C2D" />
+              <stop offset="100%" stopColor="#1B3F1E" />
+            </linearGradient>
+            <linearGradient id="emeraldRightFallback" x1="70%" y1="20%" x2="20%" y2="85%">
+              <stop offset="0%" stopColor="#38773C" />
+              <stop offset="50%" stopColor="#2A5C2D" />
+              <stop offset="100%" stopColor="#1B3F1E" />
+            </linearGradient>
+            <radialGradient id="pearlGradFallback" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="60%" stopColor="#FBF4EA" />
+              <stop offset="100%" stopColor="#EAD8C1" />
+            </radialGradient>
           </defs>
-          <path
-            d="M 50 50 C 35 35, 12 40, 20 62 C 26 78, 44 74, 50 50 Z"
-            fill="url(#emeraldGradFallback)"
-          />
-          <path
-            d="M 50 50 C 65 35, 88 40, 80 62 C 74 78, 56 74, 50 50 Z"
-            fill="url(#emeraldGradFallback)"
-          />
-          <path
-            d="M 50 14 C 40 28, 42 42, 50 52 C 58 42, 60 28, 50 14 Z"
-            fill="url(#goldGradFallback)"
-          />
-          <path
-            d="M 50 48 C 38 42, 30 28, 38 22 C 46 16, 48 34, 50 48 Z"
-            fill="url(#goldGradFallback)"
-          />
-          <path
-            d="M 50 48 C 62 42, 70 28, 62 22 C 54 16, 52 34, 50 48 Z"
-            fill="url(#goldGradFallback)"
-          />
-          <path
-            d="M 50 52 C 45 66, 46 82, 50 88 C 54 82, 55 66, 50 52 Z"
-            fill="url(#goldGradFallback)"
-          />
-          <circle cx="50" cy="50" r="5" fill="#FAF0E6" stroke="url(#goldGradFallback)" strokeWidth="1.5" />
+          <g transform="scale(0.195) translate(0, 0)">
+            <path d="M 256 256 C 220 200, 140 210, 148 276 C 154 322, 204 336, 256 270 Z" fill="url(#emeraldLeftFallback)" />
+            <path d="M 256 256 C 292 200, 372 210, 364 276 C 358 322, 308 336, 256 270 Z" fill="url(#emeraldRightFallback)" />
+            <path d="M 256 250 C 244 285, 240 335, 256 388 C 272 335, 268 285, 256 250 Z" fill="url(#goldStemFallback)" />
+            <path d="M 256 250 C 225 220, 195 165, 222 145 C 245 130, 252 185, 256 250 Z" fill="url(#goldLeftPetalFallback)" />
+            <path d="M 256 250 C 287 220, 317 165, 290 145 C 267 130, 260 185, 256 250 Z" fill="url(#goldRightPetalFallback)" />
+            <path d="M 256 120 C 235 155, 240 215, 256 260 C 272 215, 277 155, 256 120 Z" fill="url(#goldCenterPetalFallback)" />
+            <circle cx="256" cy="256" r="20" fill="#C99426" />
+            <circle cx="256" cy="256" r="17" fill="url(#pearlGradFallback)" stroke="#DDAE3B" strokeWidth="2" />
+          </g>
         </svg>
       )}
 

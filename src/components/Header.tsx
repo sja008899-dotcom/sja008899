@@ -63,19 +63,18 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs transition-all">
-      {/* Top micro announcement bar */}
-      <div className="bg-[#1F3F1B] text-[#FAF0E6] text-xs py-1.5 px-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs transition-all pt-[env(safe-area-inset-top,0px)]">
+      {/* Top micro announcement bar (desktop only to prevent mobile clutter) */}
+      <div className="hidden md:block bg-[#1F3F1B] text-[#FAF0E6] text-xs py-1.5 px-4">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1 bg-[#D4AF37] text-[#1F3F1B] font-bold px-2 py-0.5 rounded-full text-[11px]">
               <Sparkles className="w-3 h-3" />
               تخفیف بهاره
             </span>
-            <span className="hidden sm:inline text-stone-200">
+            <span className="text-stone-200">
               ارسال فوری ۲ ساعته در تهران | ۵٪ تخفیف اولین خرید با کد: <strong className="text-[#D4AF37]">GOLARYS5</strong>
             </span>
-            <span className="sm:hidden text-stone-200">ارسال فوری گل | تخفیف اولین خرید</span>
           </div>
 
           <div className="flex items-center gap-3 text-stone-300">
@@ -111,11 +110,11 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Main navigation header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-18 gap-2 sm:gap-3">
           
           {/* Logo & Brand */}
-          <div className="flex items-center gap-3 cursor-pointer select-none group" onClick={() => handleNavClick('home')}>
+          <div className="flex items-center gap-2 cursor-pointer select-none group shrink-0" onClick={() => handleNavClick('home')}>
             <GolarysLogo size="md" variant="emerald" />
           </div>
 

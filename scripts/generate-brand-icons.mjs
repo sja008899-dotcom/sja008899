@@ -3,11 +3,16 @@ import fs from 'fs';
 import path from 'path';
 
 // Master SVG Vector for Golarys Brand Icon:
-// Transparent background, full-canvas scaling (large & sharp), rich gradients, clean drop-shadows
-export function createGolarysSvg(hasBackground = false) {
+// hasBackground: true (with luxury emerald radial gradient) or false (transparent background)
+// isAdaptiveForeground: true (scaled within 66% safe zone of 108dp canvas for Android Adaptive Icons)
+export function createGolarysSvg(hasBackground = false, isAdaptiveForeground = false) {
+  const transform = isAdaptiveForeground 
+    ? 'transform="translate(85, 85) scale(0.66)"' 
+    : 'transform="translate(0, 0) scale(1)"';
+
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background Gradient (Only if explicit bg requested) -->
+    <!-- Background Gradient -->
     <radialGradient id="bgGrad" cx="50%" cy="45%" r="65%">
       <stop offset="0%" stopColor="#1E4B25"/>
       <stop offset="60%" stopColor="#173B1D"/>
@@ -70,7 +75,7 @@ export function createGolarysSvg(hasBackground = false) {
       <stop offset="100%" stopColor="#D9BE9B"/>
     </radialGradient>
 
-    <!-- Soft Drop Shadows for Depth -->
+    <!-- Soft Drop Shadows -->
     <filter id="petalShadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.32"/>
     </filter>
@@ -81,8 +86,8 @@ export function createGolarysSvg(hasBackground = false) {
 
   ${hasBackground ? '<rect width="512" height="512" rx="0" fill="url(#bgGrad)" />' : ''}
 
-  <!-- Emblem Group - Large, Prominent, Razor-Sharp & Balanced -->
-  <g id="golarys-emblem" filter="url(#petalShadow)">
+  <!-- Emblem Group -->
+  <g ${transform} filter="url(#petalShadow)">
     
     <!-- 1. Left Emerald Petal Leaf -->
     <path 
@@ -149,56 +154,62 @@ export function createGolarysSvg(hasBackground = false) {
 }
 
 async function generateAllIcons() {
-  // Generate both transparent and solid background versions
-  const transparentSvg = Buffer.from(createGolarysSvg(false));
-  const bgSvg = Buffer.from(createGolarysSvg(true));
+  const transparentSvg = Buffer.from(createGolarysSvg(false, false));
+  const bgSvg = Buffer.from(createGolarysSvg(true, false));
+  const adaptiveFgSvg = Buffer.from(createGolarysSvg(false, true));
 
   const destinations = [
-    // 1. Transparent high-res brand icons (Primary for Web, Header, App UI)
-    { file: 'public/logo-gold.png', width: 512, height: 512, svg: transparentSvg },
+    // Web public directory
     { file: 'public/logo-transparent.png', width: 512, height: 512, svg: transparentSvg },
+    { file: 'public/logo-gold.png', width: 512, height: 512, svg: transparentSvg },
     { file: 'public/golarys-icon-transparent.png', width: 512, height: 512, svg: transparentSvg },
     { file: 'public/golarys-icon-1024.png', width: 1024, height: 1024, svg: transparentSvg },
-    { file: 'public/logo-512.png', width: 512, height: 512, svg: transparentSvg },
-    { file: 'public/logo-192.png', width: 192, height: 192, svg: transparentSvg },
-    { file: 'public/favicon.png', width: 64, height: 64, svg: transparentSvg },
-
-    // 2. Play Store & App Store icons (High-res 512x512 with luxury emerald bg for stores requiring square backgrounds)
+    { file: 'public/logo-512.png', width: 512, height: 512, svg: bgSvg },
+    { file: 'public/logo-192.png', width: 192, height: 192, svg: bgSvg },
     { file: 'public/golarys-play-store-icon-512.png', width: 512, height: 512, svg: bgSvg },
+    { file: 'public/favicon.png', width: 64, height: 64, svg: bgSvg },
 
-    // 3. Android app resources (mipmap icons with transparent / full crisp rendering)
-    { file: 'android/app/src/main/res/mipmap-mdpi/ic_launcher.png', width: 48, height: 48, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png', width: 48, height: 48, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-hdpi/ic_launcher.png', width: 72, height: 72, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png', width: 72, height: 72, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher.png', width: 96, height: 96, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png', width: 96, height: 96, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png', width: 144, height: 144, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png', width: 144, height: 144, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png', width: 192, height: 192, svg: transparentSvg },
-    { file: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png', width: 192, height: 192, svg: transparentSvg },
+    // Android Legacy Icons (Full icon with luxury emerald background for all launcher sizes)
+    { file: 'android/app/src/main/res/mipmap-mdpi/ic_launcher.png', width: 48, height: 48, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png', width: 48, height: 48, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-hdpi/ic_launcher.png', width: 72, height: 72, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png', width: 72, height: 72, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher.png', width: 96, height: 96, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png', width: 96, height: 96, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png', width: 144, height: 144, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png', width: 144, height: 144, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png', width: 192, height: 192, svg: bgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png', width: 192, height: 192, svg: bgSvg },
 
-    // 4. iOS app resources
+    // Android Adaptive Icon Foregrounds (Scaled within safe area for API 26+)
+    { file: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png', width: 108, height: 108, svg: adaptiveFgSvg },
+    { file: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png', width: 162, height: 162, svg: adaptiveFgSvg },
+    { file: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png', width: 216, height: 216, svg: adaptiveFgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png', width: 324, height: 324, svg: adaptiveFgSvg },
+    { file: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png', width: 432, height: 432, svg: adaptiveFgSvg },
+
+    // iOS app resources
     { file: 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png', width: 1024, height: 1024, svg: bgSvg },
-    { file: 'ios/App/App/public/logo-512.png', width: 512, height: 512, svg: transparentSvg },
-    { file: 'ios/App/App/public/logo-192.png', width: 192, height: 192, svg: transparentSvg },
-    { file: 'ios/App/App/public/favicon.png', width: 64, height: 64, svg: transparentSvg },
+    { file: 'ios/App/App/public/logo-512.png', width: 512, height: 512, svg: bgSvg },
+    { file: 'ios/App/App/public/logo-192.png', width: 192, height: 192, svg: bgSvg },
+    { file: 'ios/App/App/public/favicon.png', width: 64, height: 64, svg: bgSvg },
     { file: 'ios/App/App/public/logo-gold.png', width: 512, height: 512, svg: transparentSvg },
     { file: 'ios/App/App/public/logo-transparent.png', width: 512, height: 512, svg: transparentSvg },
   ];
 
   for (const item of destinations) {
     const dir = path.dirname(item.file);
-    if (fs.existsSync(dir)) {
-      await sharp(item.svg)
-        .resize(item.width, item.height)
-        .png()
-        .toFile(item.file);
-      console.log(`Generated: ${item.file} (${item.width}x${item.height})`);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
+    await sharp(item.svg)
+      .resize(item.width, item.height)
+      .png()
+      .toFile(item.file);
+    console.log(`Generated: ${item.file} (${item.width}x${item.height})`);
   }
 
-  console.log('All high-resolution transparent brand icons generated successfully!');
+  console.log('All Android & iOS native icons generated successfully!');
 }
 
 generateAllIcons().catch(console.error);

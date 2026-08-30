@@ -27,12 +27,13 @@ import { SEOHead } from './components/SEOHead';
 import { HomeFAQSection } from './components/HomeFAQSection';
 import { HomeSeoContent } from './components/HomeSeoContent';
 import { SitemapModal } from './components/SitemapModal';
+import { BottomNavBar } from './components/BottomNavBar';
 
 const MainContent: React.FC = () => {
   const { activeTab, selectedProduct, selectedBlogArticle } = useApp();
 
   return (
-    <main className="min-h-[calc(100vh-200px)]">
+    <main className="min-h-[calc(100vh-200px)] pb-16 md:pb-0">
       <SEOHead activeTab={activeTab} selectedProduct={selectedProduct} selectedBlogArticle={selectedBlogArticle} />
       {activeTab === 'home' && (
         <>
@@ -82,6 +83,9 @@ export default function App() {
         
         {/* Interactive Modals and Drawers */}
         <ModalsContainer />
+
+        {/* Mobile Native Bottom Navigation */}
+        <BottomNavBar />
       </div>
     </AppProvider>
   );

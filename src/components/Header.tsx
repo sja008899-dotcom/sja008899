@@ -159,6 +159,17 @@ export const Header: React.FC = () => {
           {/* Action Tools */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
             
+            {/* Direct App Download Button (Android & iOS) */}
+            <button
+              onClick={() => setIsMobileAppModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-800 to-[#2D5A27] text-white hover:from-emerald-700 hover:to-[#1F3F1B] transition-all shadow-xs border border-emerald-600/30 cursor-pointer text-xs font-bold"
+              title="دانلود مستقیم اپلیکیشن اندروید و iOS"
+            >
+              <Smartphone className="w-4 h-4 text-[#D4AF37] animate-pulse" />
+              <span className="hidden sm:inline">دانلود اپ اندروید</span>
+              <span className="text-[10px] sm:hidden">اپلیکیشن</span>
+            </button>
+
             {/* Search trigger */}
             <div className="relative">
               {showSearchInput ? (

@@ -18,7 +18,7 @@ import {
 import { toPersianDigits } from '../lib/formatters';
 
 export const HeroSection: React.FC = () => {
-  const { siteContent, setActiveTab, setSelectedCategory } = useApp();
+  const { siteContent, setActiveTab, setSelectedCategory, setIsMobileAppModalOpen } = useApp();
   const { hero } = siteContent.site;
   const [activeMediaTab, setActiveMediaTab] = useState<'bloom' | 'arranging' | 'craft'>('bloom');
 
@@ -116,6 +116,15 @@ export const HeroSection: React.FC = () => {
               >
                 <Store className="w-4 h-4 text-[#D4AF37]" />
                 <span>ورود باغبانان و غرفه‌داران</span>
+              </button>
+
+              <button
+                onClick={() => setIsMobileAppModalOpen(true)}
+                className="px-4 py-3.5 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm border border-stone-700 flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all group"
+                title="دانلود مستقیم اپلیکیشن اندروید و آیفون"
+              >
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span className="text-[#D4AF37]">📱 دانلود اپلیکیشن اندروید (APK)</span>
               </button>
             </div>
 

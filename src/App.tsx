@@ -27,6 +27,7 @@ import { SEOHead } from './components/SEOHead';
 import { HomeFAQSection } from './components/HomeFAQSection';
 import { HomeSeoContent } from './components/HomeSeoContent';
 import { SitemapModal } from './components/SitemapModal';
+import { MobileAppModal } from './components/MobileAppModal';
 import { BottomNavBar } from './components/BottomNavBar';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
 
@@ -122,6 +123,7 @@ const ModalsContainer: React.FC = () => {
       <NotificationsDrawer />
       <ToastContainer />
       <SitemapModal isOpen={isSitemapModalOpen} onClose={() => setIsSitemapModalOpen(false)} />
+      <MobileAppModal />
     </>
   );
 };

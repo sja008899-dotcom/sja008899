@@ -99,6 +99,10 @@ interface AppContextType {
   isSitemapModalOpen: boolean;
   setIsSitemapModalOpen: (open: boolean) => void;
 
+  // Mobile App Download Modal
+  isMobileAppModalOpen: boolean;
+  setIsMobileAppModalOpen: (open: boolean) => void;
+
   // Admin Security (JWT & Server Session)
   isAdminAuthenticated: boolean;
   adminPassword?: string;
@@ -139,6 +143,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] = useState(false);
   const [isSitemapModalOpen, setIsSitemapModalOpen] = useState(false);
+  const [isMobileAppModalOpen, setIsMobileAppModalOpen] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -981,6 +986,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteContactMessage,
         isSitemapModalOpen,
         setIsSitemapModalOpen,
+        isMobileAppModalOpen,
+        setIsMobileAppModalOpen,
         isAdminAuthenticated,
         adminLogin,
         adminLogout,

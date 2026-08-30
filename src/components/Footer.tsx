@@ -16,13 +16,15 @@ import {
   Compass,
   CreditCard,
   Award,
-  Lock
+  Lock,
+  Smartphone,
+  Apple
 } from 'lucide-react';
 import { toPersianDigits } from '../lib/formatters';
 import { GolarysLogo } from './GolarysLogo';
 
 export const Footer: React.FC = () => {
-  const { siteContent, setActiveTab, setIsSitemapModalOpen, showToast } = useApp();
+  const { siteContent, setActiveTab, setIsSitemapModalOpen, setIsMobileAppModalOpen, showToast } = useApp();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -123,12 +125,20 @@ export const Footer: React.FC = () => {
                 <Send className="w-5 h-5" />
               </a>
               <button
+                onClick={() => setIsMobileAppModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-[#D4AF37] hover:bg-[#BF9B2D] text-[#172E14] text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                title="دانلود اپلیکیشن آیفون و اندروید"
+              >
+                <Smartphone className="w-4 h-4 text-[#172E14]" />
+                <span>دانلود اپلیکیشن</span>
+              </button>
+              <button
                 onClick={() => setIsSitemapModalOpen(true)}
                 className="px-3.5 py-2 rounded-xl bg-[#2D5A27]/80 hover:bg-[#D4AF37] hover:text-[#172E14] text-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                 title="مشاهده نقشه کامل سایت و سئو"
               >
                 <Compass className="w-4 h-4 text-[#D4AF37]" />
-                <span>نقشه سایت و سئو (Sitemap)</span>
+                <span>نقشه سایت</span>
               </button>
             </div>
           </div>
@@ -137,6 +147,12 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <h4 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">دسترسی سریع</h4>
             <ul className="space-y-2 text-sm text-stone-400">
+              <li>
+                <button onClick={() => setIsMobileAppModalOpen(true)} className="hover:text-[#D4AF37] text-amber-300 font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>دانلود اپلیکیشن iOS و اندروید 📱</span>
+                </button>
+              </li>
               <li>
                 <button onClick={() => { setActiveTab('marketplace'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#D4AF37] transition-colors cursor-pointer">
                   بازارچه و محصولات گل

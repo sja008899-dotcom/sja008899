@@ -19,11 +19,11 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
 
   // Dimension mappings for the logo icon
   const iconDimensions = {
-    xs: { px: 28, imgSize: 'w-7 h-7' },
-    sm: { px: 36, imgSize: 'w-9 h-9' },
-    md: { px: 46, imgSize: 'w-11 h-11' },
-    lg: { px: 60, imgSize: 'w-15 h-15' },
-    xl: { px: 80, imgSize: 'w-20 h-20' },
+    xs: { px: 30, imgSize: 'w-7.5 h-7.5' },
+    sm: { px: 40, imgSize: 'w-10 h-10' },
+    md: { px: 52, imgSize: 'w-13 h-13' },
+    lg: { px: 68, imgSize: 'w-17 h-17' },
+    xl: { px: 92, imgSize: 'w-23 h-23' },
   };
 
   const { imgSize, px } = iconDimensions[size] || iconDimensions.md;
@@ -48,113 +48,25 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
     <div
       className={`inline-flex items-center gap-2.5 select-none transition-transform ${className}`}
     >
-      {/* Golden Iris Flower Emblem (Razor-sharp, Large, Transparent Vector) */}
-      <svg
-        width={px}
-        height={px}
-        viewBox="0 0 512 512"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0 transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_4px_10px_rgba(212,175,55,0.3)]"
+      {/* Official Master Golarys Golden Iris Jewel Logo */}
+      <div 
+        className={`relative shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${imgSize}`}
+        style={{ width: `${px}px`, height: `${px}px` }}
       >
-        <defs>
-          <linearGradient id="goldCenterPetalFull" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="#FFE58F" />
-            <stop offset="30%" stopColor="#F5C842" />
-            <stop offset="70%" stopColor="#D49B24" />
-            <stop offset="100%" stopColor="#A67012" />
-          </linearGradient>
-
-          <linearGradient id="goldLeftPetalFull" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFE899" />
-            <stop offset="35%" stopColor="#F5C842" />
-            <stop offset="75%" stopColor="#C98F1D" />
-            <stop offset="100%" stopColor="#99630D" />
-          </linearGradient>
-
-          <linearGradient id="goldRightPetalFull" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FFE899" />
-            <stop offset="35%" stopColor="#F5C842" />
-            <stop offset="75%" stopColor="#C98F1D" />
-            <stop offset="100%" stopColor="#99630D" />
-          </linearGradient>
-
-          <linearGradient id="goldStemFull" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="#FCE07A" />
-            <stop offset="45%" stopColor="#DCA427" />
-            <stop offset="85%" stopColor="#B37812" />
-            <stop offset="100%" stopColor="#7E4F06" />
-          </linearGradient>
-
-          <linearGradient id="emeraldLeftFull" x1="20%" y1="15%" x2="85%" y2="85%">
-            <stop offset="0%" stopColor="#439348" />
-            <stop offset="40%" stopColor="#2E6C32" />
-            <stop offset="80%" stopColor="#1B471E" />
-            <stop offset="100%" stopColor="#102E13" />
-          </linearGradient>
-
-          <linearGradient id="emeraldRightFull" x1="80%" y1="15%" x2="15%" y2="85%">
-            <stop offset="0%" stopColor="#439348" />
-            <stop offset="40%" stopColor="#2E6C32" />
-            <stop offset="80%" stopColor="#1B471E" />
-            <stop offset="100%" stopColor="#102E13" />
-          </linearGradient>
-
-          <radialGradient id="pearlGradFull" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="45%" stopColor="#FFF7EC" />
-            <stop offset="75%" stopColor="#F2DFC7" />
-            <stop offset="100%" stopColor="#D9BE9B" />
-          </radialGradient>
-
-          <filter id="logoShadowFull" x="-15%" y="-15%" width="130%" height="130%">
-            <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#000000" floodOpacity="0.25" />
-          </filter>
-        </defs>
-
-        <g id="golarys-vector-emblem" filter="url(#logoShadowFull)">
-          <path
-            d="M 256 256 C 185 140, 24 160, 28 300 C 32 395, 140 415, 256 280 Z"
-            fill="url(#emeraldLeftFull)"
-          />
-
-          <path
-            d="M 256 256 C 327 140, 488 160, 484 300 C 480 395, 372 415, 256 280 Z"
-            fill="url(#emeraldRightFull)"
-          />
-
-          <path
-            d="M 256 250 C 230 320, 222 410, 256 492 C 290 410, 282 320, 256 250 Z"
-            fill="url(#goldStemFull)"
-          />
-
-          <path
-            d="M 256 256 C 190 210, 125 130, 182 65 C 228 35, 248 145, 256 256 Z"
-            fill="url(#goldLeftPetalFull)"
-          />
-
-          <path
-            d="M 256 256 C 322 210, 387 130, 330 65 C 284 35, 264 145, 256 256 Z"
-            fill="url(#goldRightPetalFull)"
-          />
-
-          <path
-            d="M 256 20 C 205 95, 210 195, 256 260 C 302 195, 307 95, 256 20 Z"
-            fill="url(#goldCenterPetalFull)"
-          />
-
-          <circle cx="256" cy="256" r="36" fill="#C99426" />
-          <circle
-            cx="256"
-            cy="256"
-            r="30"
-            fill="url(#pearlGradFull)"
-            stroke="#E6B843"
-            strokeWidth="3.5"
-          />
-          <circle cx="245" cy="245" r="7" fill="#FFFFFF" opacity="0.9" />
-        </g>
-      </svg>
+        <img
+          src="/logo-transparent.png"
+          alt="لوگوی رسمی گل آریس (Golarys)"
+          className="w-full h-full object-contain filter drop-shadow-[0_4px_10px_rgba(212,175,55,0.35)]"
+          loading="eager"
+          decoding="sync"
+          onError={(e) => {
+            if (!imgError) {
+              setImgError(true);
+              (e.target as HTMLImageElement).src = '/logo-gold.png';
+            }
+          }}
+        />
+      </div>
 
       {/* Brand Typography */}
       {showText && !iconOnly && (

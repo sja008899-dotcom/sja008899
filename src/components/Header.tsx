@@ -16,7 +16,9 @@ import {
   Truck,
   Bell,
   CheckCircle2,
-  LogOut
+  LogOut,
+  Smartphone,
+  Apple
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import { toPersianDigits } from '../lib/formatters';
@@ -38,7 +40,8 @@ export const Header: React.FC = () => {
     setIsTrackingModalOpen,
     setIsNotificationsDrawerOpen,
     dispatchedNotifications,
-    isAdminAuthenticated
+    isAdminAuthenticated,
+    setIsMobileAppModalOpen
   } = useApp();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -78,6 +81,18 @@ export const Header: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 text-stone-300">
+            {/* Mobile App Download */}
+            <button
+              onClick={() => setIsMobileAppModalOpen(true)}
+              className="hover:text-white text-amber-300 hover:text-amber-200 flex items-center gap-1 text-[11px] font-bold transition-colors cursor-pointer"
+              title="دانلود اپلیکیشن آیفون و اندروید"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>دانلود اپلیکیشن (iOS / Android)</span>
+            </button>
+
+            <span className="text-stone-500">|</span>
+
             {/* Quick Order Tracking */}
             <button
               onClick={() => setIsTrackingModalOpen(true)}
@@ -264,6 +279,17 @@ export const Header: React.FC = () => {
             ))}
 
             <div className="pt-4 mt-2 border-t border-stone-100 flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setIsMobileAppModalOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#172E14] to-[#2D5A27] text-white font-bold text-sm cursor-pointer shadow-md"
+              >
+                <Smartphone className="w-4 h-4 text-[#D4AF37]" />
+                <span>دانلود اپلیکیشن موبایل (iOS و اندروید)</span>
+              </button>
+
               <button
                 onClick={() => {
                   setIsAuthModalOpen(true);

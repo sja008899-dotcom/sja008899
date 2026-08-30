@@ -21,7 +21,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { PaymentMethod } from '../types';
-import { toPersianDigits } from '../lib/formatters';
+import { toPersianDigits, toEnglishDigits, sanitizePersianPhone, escapeHtml } from '../lib/formatters';
 
 export const CheckoutModal: React.FC = () => {
   const { 
@@ -44,6 +44,10 @@ export const CheckoutModal: React.FC = () => {
   const [postalCode, setPostalCode] = useState(user?.postalCode || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Discount Code State
+  const [discountCode, setDiscountCode] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; percent: number; amount: number } | null>(null);
+
   // Pre-dispatch Photo State
   const [sendPreDispatchPhoto, setSendPreDispatchPhoto] = useState(true);
 
@@ -60,21 +64,50 @@ export const CheckoutModal: React.FC = () => {
 
   // Price Calculations
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const shippingCost = subtotal >= 1200000 ? 0 : 65000;
-  const finalAmount = subtotal + shippingCost;
+  const discountAmount = appliedDiscount ? Math.round((subtotal * appliedDiscount.percent) / 100) : 0;
+  const subtotalAfterDiscount = Math.max(0, subtotal - discountAmount);
+  const shippingCost = subtotalAfterDiscount >= 1200000 ? 0 : 65000;
+  const finalAmount = subtotalAfterDiscount + shippingCost;
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanCode = discountCode.trim().toUpperCase();
+    if (!cleanCode) {
+      showToast('لطفاً کد تخفیف را وارد فرمایید.', 'error');
+      return;
+    }
+
+    if (cleanCode === 'GOLARYS5') {
+      const calcDiscount = Math.round((subtotal * 5) / 100);
+      setAppliedDiscount({ code: 'GOLARYS5', percent: 5, amount: calcDiscount });
+      showToast('کد تخفیف ۵٪ اولین خرید (GOLARYS5) با موفقیت اعمال گردید!', 'success');
+      triggerCelebration();
+    } else if (cleanCode === 'BAHAR' || cleanCode === 'ARIS10') {
+      const calcDiscount = Math.round((subtotal * 10) / 100);
+      setAppliedDiscount({ code: cleanCode, percent: 10, amount: calcDiscount });
+      showToast('کد تخفیف ویژه ۱۰٪ جشنواره بهاره با موفقیت اعمال شد!', 'success');
+      triggerCelebration();
+    } else {
+      showToast('کد تخفیف وارد شده نامعتبر یا منقضی شده است.', 'error');
+    }
+  };
 
   const handleSubmitCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!recipientName.trim()) {
+    const cleanName = recipientName.trim();
+    const cleanPhone = sanitizePersianPhone(recipientPhone);
+    const cleanAddress = address.trim();
+
+    if (!cleanName) {
       showToast('لطفاً نام تحویل‌گیرنده را وارد فرمایید.', 'error');
       return;
     }
-    if (!recipientPhone.trim() || recipientPhone.length < 10) {
-      showToast('لطفاً شماره تماس معتبر تحویل‌گیرنده را وارد فرمایید.', 'error');
+    if (!cleanPhone || cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
+      showToast('لطفاً شماره تماس معتبر ۱۱ رقمی (مانند ۰۹۱۲۳۴۵۶۷۸۹) وارد فرمایید.', 'error');
       return;
     }
-    if (!address.trim()) {
+    if (!cleanAddress) {
       showToast('لطفاً آدرس دقیق پستی را وارد فرمایید.', 'error');
       return;
     }
@@ -92,11 +125,11 @@ export const CheckoutModal: React.FC = () => {
       paymentMethod,
       deliveryDate,
       deliveryTimeSlot,
-      recipientName: recipientName.trim(),
-      recipientPhone: recipientPhone.trim(),
-      recipientAddress: address.trim(),
+      recipientName: cleanName,
+      recipientPhone: cleanPhone,
+      recipientAddress: cleanAddress,
       recipientCity: city,
-      notes: notes || undefined,
+      notes: notes ? escapeHtml(notes.trim()) : undefined,
       sendPreDispatchPhoto
     });
 
@@ -118,7 +151,7 @@ export const CheckoutModal: React.FC = () => {
             orderId: newOrder.id,
             description: `سفارش ${newOrder.trackingCode} از گل آریس`,
             callback_url: `${window.location.origin}/?payment_verify=true&order_id=${newOrder.id}`,
-            mobile: user?.phone || recipientPhone
+            mobile: user?.phone || cleanPhone
           })
         });
 
@@ -440,12 +473,50 @@ export const CheckoutModal: React.FC = () => {
             )}
           </div>
 
+          {/* Discount Coupon Code Box */}
+          <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200 space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black text-stone-800 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                <span>کد تخفیف یا کارت هدیه:</span>
+              </label>
+              {appliedDiscount && (
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  کد {appliedDiscount.code} فعال شد ({toPersianDigits(appliedDiscount.percent)}٪ تخفیف)
+                </span>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+                placeholder="مثلاً GOLARYS5 یا BAHAR"
+                dir="ltr"
+                className="flex-1 px-4 py-2.5 bg-white border border-stone-300 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#2D5A27]"
+              />
+              <button
+                type="button"
+                onClick={handleApplyCoupon}
+                className="px-4 py-2.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              >
+                اعمال تخفیف
+              </button>
+            </div>
+          </div>
+
           {/* Step 4: Summary & Total Calculation */}
           <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200 space-y-2.5 text-xs">
             <div className="flex justify-between text-stone-600">
               <span>مجموع اقلام سبد خرید ({toPersianDigits(cart.length)} مورد):</span>
               <span className="font-bold text-stone-900">{subtotal.toLocaleString('fa-IR')} تومان</span>
             </div>
+            {appliedDiscount && (
+              <div className="flex justify-between text-emerald-700 font-bold">
+                <span>تخفیف کد ({appliedDiscount.code}):</span>
+                <span>-{discountAmount.toLocaleString('fa-IR')} تومان</span>
+              </div>
+            )}
             <div className="flex justify-between text-stone-600">
               <span>هزینه بسته‌بندی لوکس هدیه و کارت پیام:</span>
               <span className="font-bold text-emerald-600">رایگان (هدیه گل آریس)</span>

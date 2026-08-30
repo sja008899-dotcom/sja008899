@@ -13,7 +13,7 @@ import {
   User as UserIcon
 } from 'lucide-react';
 import { GolarysLogo } from './GolarysLogo';
-import { toPersianDigits } from '../lib/formatters';
+import { toPersianDigits, toEnglishDigits, sanitizePersianPhone } from '../lib/formatters';
 
 export const AuthModal: React.FC = () => {
   const { 
@@ -58,13 +58,13 @@ export const AuthModal: React.FC = () => {
 
   if (!isAuthModalOpen) return null;
 
-  const currentTarget = authMethod === 'phone' ? phoneNumber : emailAddress;
+  const currentTarget = authMethod === 'phone' ? sanitizePersianPhone(phoneNumber) : emailAddress.trim();
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (authMethod === 'phone') {
-      const cleanPhone = phoneNumber.trim().replace(/\D/g, '');
-      if (cleanPhone.length < 10 || (!cleanPhone.startsWith('09') && !cleanPhone.startsWith('9'))) {
+      const cleanPhone = sanitizePersianPhone(phoneNumber);
+      if (cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
         showToast('لطفاً شماره موبایل معتبر ۱۱ رقمی (مانند ۰۹۱۲۳۴۵۶۷۸۹) وارد کنید.', 'error');
         return;
       }
@@ -88,13 +88,14 @@ export const AuthModal: React.FC = () => {
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otpCode.trim() || otpCode.trim().length !== 5) {
+    const cleanOtp = toEnglishDigits(otpCode).trim();
+    if (!cleanOtp || cleanOtp.length !== 5) {
       showToast('لطفاً کد تایید ۵ رقمی را کامل وارد کنید.', 'error');
       return;
     }
 
     setIsLoading(true);
-    const success = await verifyOtp(currentTarget, otpCode.trim(), fullName, city, address);
+    const success = await verifyOtp(currentTarget, cleanOtp, fullName, city, address);
     setIsLoading(false);
 
     if (success) {
@@ -233,6 +234,8 @@ export const AuthModal: React.FC = () => {
                           type="tel"
                           required
                           dir="ltr"
+                          inputMode="numeric"
+                          autoComplete="tel"
                           placeholder="09123456789"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
@@ -296,9 +299,12 @@ export const AuthModal: React.FC = () => {
                       required
                       maxLength={5}
                       dir="ltr"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      autoComplete="one-time-code"
                       placeholder="• • • • •"
                       value={otpCode}
-                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                      onChange={(e) => setOtpCode(toEnglishDigits(e.target.value).replace(/\D/g, ''))}
                       className="w-full py-3 text-center tracking-[0.6em] text-2xl font-black font-mono bg-stone-50 border border-stone-300 rounded-xl text-stone-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D5A27]"
                       autoFocus
                     />

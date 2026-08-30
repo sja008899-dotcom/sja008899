@@ -10,12 +10,13 @@ import {
   Heart, 
   Star,
   CheckCircle2,
-  Mail
+  Mail,
+  Share2
 } from 'lucide-react';
 import { formatToman, toPersianDigits } from '../lib/formatters';
 
 export const ProductModal: React.FC = () => {
-  const { quickViewProduct, setQuickViewProduct, addToCart, setIsGiftBuilderOpen } = useApp();
+  const { quickViewProduct, setQuickViewProduct, addToCart, setIsGiftBuilderOpen, showToast } = useApp();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
   const [giftMessage, setGiftMessage] = useState('');
@@ -26,6 +27,30 @@ export const ProductModal: React.FC = () => {
 
   const currentImage = selectedImage || quickViewProduct.image;
   const gallery = quickViewProduct.gallery || [quickViewProduct.image];
+
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/product/${quickViewProduct.slug}`;
+    const shareData = {
+      title: quickViewProduct.name,
+      text: `خرید آنلاین ${quickViewProduct.name} از بازار گل آریس:`,
+      url: shareUrl
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // User cancelled or share failed
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        showToast('لینک محصول در کلیپ‌بورد کپی شد.', 'success');
+      } catch {
+        showToast('امکان اشتراک‌گذاری در این مرورگر وجود ندارد.', 'error');
+      }
+    }
+  };
 
   const handleAdd = () => {
     addToCart(
@@ -43,14 +68,24 @@ export const ProductModal: React.FC = () => {
         className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden border border-stone-200 relative animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
-        <button
-          onClick={() => setQuickViewProduct(null)}
-          className="absolute top-4 left-4 z-10 p-2.5 rounded-full bg-white/90 hover:bg-white text-stone-700 shadow-md cursor-pointer transition-colors"
-          aria-label="بستن پنجره"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        {/* Action buttons (Share & Close) */}
+        <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+          <button
+            onClick={handleShare}
+            className="p-2.5 rounded-full bg-white/90 hover:bg-white text-stone-700 shadow-md cursor-pointer transition-colors"
+            title="اشتراک‌گذاری محصول"
+            aria-label="اشتراک‌گذاری محصول"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setQuickViewProduct(null)}
+            className="p-2.5 rounded-full bg-white/90 hover:bg-white text-stone-700 shadow-md cursor-pointer transition-colors"
+            aria-label="بستن پنجره"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
           

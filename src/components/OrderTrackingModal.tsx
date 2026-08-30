@@ -23,7 +23,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Order, OrderStatus } from '../types';
-import { toPersianDigits } from '../lib/formatters';
+import { toPersianDigits, toEnglishDigits, sanitizePersianPhone } from '../lib/formatters';
 
 export const OrderTrackingModal: React.FC = () => {
   const { 
@@ -45,25 +45,41 @@ export const OrderTrackingModal: React.FC = () => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) {
+    const rawQuery = searchQuery.trim();
+    if (!rawQuery) {
       showToast('لطفاً کد پیگیری یا شماره تماس را وارد کنید.', 'error');
       return;
     }
-    const foundList = await findOrderByTracking(searchQuery);
+
+    const cleanLatin = toEnglishDigits(rawQuery).trim();
+    const cleanPhone = sanitizePersianPhone(rawQuery);
+    
+    // Attempt tracking API search
+    const foundList = await findOrderByTracking(cleanLatin);
     if (foundList && foundList.length > 0) {
       setSelectedOrder(foundList[0]);
       showToast(`سفارش با کد ${foundList[0].trackingCode} یافت شد.`, 'success');
-    } else {
-      // Check local state fallback
-      const localMatch = orders.find(
-        (o) => o.trackingCode.toLowerCase().includes(searchQuery.trim().toLowerCase()) || o.recipientPhone.includes(searchQuery.trim())
+      return;
+    }
+
+    // Attempt local state search with variations
+    const localMatch = orders.find((o) => {
+      const normCode = o.trackingCode.toLowerCase();
+      const searchCode = cleanLatin.toLowerCase();
+      const normPhone = o.recipientPhone ? sanitizePersianPhone(o.recipientPhone) : '';
+      return (
+        normCode === searchCode ||
+        normCode.includes(searchCode) ||
+        (cleanPhone && normPhone.includes(cleanPhone)) ||
+        (cleanLatin.length >= 4 && o.id.includes(cleanLatin))
       );
-      if (localMatch) {
-        setSelectedOrder(localMatch);
-        showToast(`سفارش با کد ${localMatch.trackingCode} یافت شد.`, 'success');
-      } else {
-        showToast('سفارشی با این مشخصات یافت نشد.', 'error');
-      }
+    });
+
+    if (localMatch) {
+      setSelectedOrder(localMatch);
+      showToast(`سفارش با کد ${localMatch.trackingCode} یافت شد.`, 'success');
+    } else {
+      showToast('سفارشی با این مشخصات یافت نشد.', 'error');
     }
   };
 

@@ -19,6 +19,15 @@ async function startServer() {
   app.use(cors());
   app.use(express.json({ limit: '10mb' }));
 
+  // Security Headers Middleware
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+
   // Zarinpal Gateway Configuration
   const ZARINPAL_MERCHANT_ID = process.env.ZARINPAL_MERCHANT_ID || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
   const IS_SANDBOX = process.env.ZARINPAL_SANDBOX !== 'false';
@@ -178,6 +187,12 @@ async function startServer() {
       const { password } = req.body;
       if (!password) {
         return res.status(400).json({ error: "رمز عبور مدیریت الزامی است." });
+      }
+
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      const rateLimitKey = `admin_login:${clientIp}`;
+      if (!checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000)) {
+        return res.status(429).json({ error: "تعداد تلاش‌های ناموفق بیش از حد مجاز است. لطفاً ۱۵ دقیقه دیگر تلاش فرمایید." });
       }
 
       const admin = db.getAdmin();

@@ -232,26 +232,43 @@ export const MarketplaceView: React.FC = () => {
       {/* 3. Products Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-stone-200 p-8 space-y-4">
+          <div className="text-center py-16 bg-white rounded-3xl border border-stone-200 p-8 space-y-5">
             <div className="w-16 h-16 rounded-full bg-stone-100 text-stone-400 mx-auto flex items-center justify-center text-3xl">
               🥀
             </div>
             <h3 className="text-lg font-bold text-stone-800 font-heading">
-              گلی با این مشخصات یافت نشد!
+              محصولی با این مشخصات یافت نشد!
             </h3>
             <p className="text-xs text-stone-500 max-w-sm mx-auto">
-              می‌توانید فیلترها را ریست کرده یا نام دیگری مانند «رز»، «ارکیده» یا «گیاه آپارتمانی» را جستجو کنید.
+              می‌توانید از کلمات پرجستجو زیر استفاده کنید یا فیلترها را ریست فرمایید:
             </p>
-            <button
-              onClick={() => {
-                setSelectedCategory('all');
-                setVendorTypeFilter('all');
-                setSearchQuery('');
-              }}
-              className="px-4 py-2 bg-[#2D5A27] text-white font-bold text-xs rounded-xl cursor-pointer"
-            >
-              مشاهده تمام گل‌ها
-            </button>
+
+            {/* Popular Suggested Search Tags */}
+            <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto pt-1">
+              {['رز هلندی قرمز', 'ارکیده فالانوپسیس', 'باکس گل تولد', 'سانسوریا کراواتی', 'گلدان سرامیکی لالجین', 'گیاه مقاوم آپارتمانی'].map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setSearchQuery(tag)}
+                  className="px-3 py-1.5 bg-stone-100 hover:bg-[#2D5A27]/10 hover:text-[#2D5A27] text-stone-700 text-xs rounded-full font-medium transition-colors cursor-pointer"
+                >
+                  🔍 {tag}
+                </button>
+              ))}
+            </div>
+
+            <div className="pt-3">
+              <button
+                onClick={() => {
+                  setSelectedCategory('all');
+                  setVendorTypeFilter('all');
+                  setSearchQuery('');
+                }}
+                className="px-5 py-2.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                مشاهده تمام محصولات بازارچه
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -8,6 +8,58 @@ export function toPersianDigits(n: number | string): string {
 }
 
 /**
+ * Converts Persian (۰-۹) and Arabic (٠-٩) digits to standard Latin digits (0-9)
+ */
+export function toEnglishDigits(str: string): string {
+  if (!str) return '';
+  return String(str)
+    .replace(/[۰٠]/g, '0')
+    .replace(/[۱١]/g, '1')
+    .replace(/[۲٢]/g, '2')
+    .replace(/[۳٣]/g, '3')
+    .replace(/[۴٤]/g, '4')
+    .replace(/[۵٥]/g, '5')
+    .replace(/[۶٦]/g, '6')
+    .replace(/[۷٧]/g, '7')
+    .replace(/[۸٨]/g, '8')
+    .replace(/[۹٩]/g, '9');
+}
+
+/**
+ * Sanitizes and normalizes a Persian phone number into standard 09xxxxxxxxx format
+ */
+export function sanitizePersianPhone(phone: string): string {
+  if (!phone) return '';
+  let cleaned = toEnglishDigits(phone).replace(/[^\d+]/g, '').trim();
+  
+  // Convert +989... to 09...
+  if (cleaned.startsWith('+98')) {
+    cleaned = '0' + cleaned.substring(3);
+  } else if (cleaned.startsWith('0098')) {
+    cleaned = '0' + cleaned.substring(4);
+  } else if (cleaned.startsWith('98') && cleaned.length === 12) {
+    cleaned = '0' + cleaned.substring(2);
+  } else if (cleaned.startsWith('9') && cleaned.length === 10) {
+    cleaned = '0' + cleaned;
+  }
+  
+  return cleaned;
+}
+
+/**
+ * Escapes HTML characters to prevent XSS in user generated text
+ */
+export function escapeHtml(str: string): string {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
  * Normalizes Persian and Arabic text for seamless search and indexing:
  * - Unifies Persian and Arabic Yeh (ي -> ی, ئ -> ی, ى -> ی)
  * - Unifies Persian and Arabic Kaf (ك -> ک)

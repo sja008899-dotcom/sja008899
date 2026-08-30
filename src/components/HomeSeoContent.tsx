@@ -58,10 +58,10 @@ export const HomeSeoContent: React.FC = () => {
 
         {/* Quick Links & Internal Navigation */}
         <div className="bg-white p-6 rounded-2xl border border-stone-200 space-y-4">
-          <h4 className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
+          <h3 className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-[#2D5A27]" />
             <span>دسته‌بندی‌های پرطرفدار بازار گل آریس:</span>
-          </h4>
+          </h3>
           <div className="flex flex-wrap gap-2 text-xs">
             <button
               onClick={() => setActiveTab('marketplace')}

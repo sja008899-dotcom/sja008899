@@ -38,11 +38,11 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
 
   const badgeBg =
     variant === 'light'
-      ? 'bg-white/20 text-[#D4AF37] border-white/30'
-      : 'bg-[#2D5A27]/10 text-[#D4AF37] border-[#D4AF37]/30';
+      ? 'bg-white/20 text-[#D4AF37] border-white/40'
+      : 'bg-[#1F3F1B] text-[#D4AF37] border-[#D4AF37]/50';
 
   const subtitleColor =
-    variant === 'light' ? 'text-stone-300' : 'text-stone-500';
+    variant === 'light' ? 'text-stone-200' : 'text-stone-600';
 
   return (
     <div

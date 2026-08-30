@@ -53,8 +53,8 @@ export const Footer: React.FC = () => {
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">ضمانت شادابی ۷ روزه</h4>
-                <p className="text-xs text-stone-400">تضمین طراوت و تعویض بی‌قید و شرط</p>
+                <h3 className="font-bold text-white text-sm">ضمانت شادابی ۷ روزه</h3>
+                <p className="text-xs text-stone-300">تضمین طراوت و تعویض بی‌قید و شرط</p>
               </div>
             </div>
 
@@ -63,8 +63,8 @@ export const Footer: React.FC = () => {
                 <Camera className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">عکاسی قبل از ارسال</h4>
-                <p className="text-xs text-stone-400">تایید کیفیت گل توسط مشتری قبل تحویل پیک</p>
+                <h3 className="font-bold text-white text-sm">عکاسی قبل از ارسال</h3>
+                <p className="text-xs text-stone-300">تایید کیفیت گل توسط مشتری قبل تحویل پیک</p>
               </div>
             </div>
 
@@ -73,8 +73,8 @@ export const Footer: React.FC = () => {
                 <Truck className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">ارسال فوری ۲ ساعته</h4>
-                <p className="text-xs text-stone-400">تحویل سریع با اسنپ و بسته‌بندی ایمن</p>
+                <h3 className="font-bold text-white text-sm">ارسال فوری ۲ ساعته</h3>
+                <p className="text-xs text-stone-300">تحویل سریع با اسنپ و بسته‌بندی ایمن</p>
               </div>
             </div>
 
@@ -83,8 +83,8 @@ export const Footer: React.FC = () => {
                 <CreditCard className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">پرداخت امن شاپرک</h4>
-                <p className="text-xs text-stone-400">درگاه رسمی بانکی شتاب با رمزپویا</p>
+                <h3 className="font-bold text-white text-sm">پرداخت امن شاپرک</h3>
+                <p className="text-xs text-stone-300">درگاه رسمی بانکی شتاب با رمزپویا</p>
               </div>
             </div>
           </div>
@@ -145,8 +145,8 @@ export const Footer: React.FC = () => {
 
           {/* Quick links Col */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">دسترسی سریع</h4>
-            <ul className="space-y-2 text-sm text-stone-400">
+            <h3 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">دسترسی سریع</h3>
+            <ul className="space-y-2 text-sm text-stone-300">
               <li>
                 <button onClick={() => setIsMobileAppModalOpen(true)} className="hover:text-[#D4AF37] text-amber-300 font-bold transition-colors cursor-pointer flex items-center gap-1.5">
                   <Smartphone className="w-3.5 h-3.5" />
@@ -179,7 +179,7 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => { setIsSitemapModalOpen(true); }} className="hover:text-[#D4AF37] text-emerald-400 font-bold transition-colors cursor-pointer flex items-center gap-1">
+                <button onClick={() => { setIsSitemapModalOpen(true); }} className="hover:text-[#D4AF37] text-emerald-300 font-bold transition-colors cursor-pointer flex items-center gap-1">
                   <span>ساختار سئو و XML نقشه</span>
                 </button>
               </li>
@@ -188,8 +188,8 @@ export const Footer: React.FC = () => {
 
           {/* Categories Col */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">دسته‌بندی‌ها</h4>
-            <ul className="space-y-2 text-sm text-stone-400">
+            <h3 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">دسته‌بندی‌ها</h3>
+            <ul className="space-y-2 text-sm text-stone-300">
               {siteContent.site.categories.slice(0, 5).map((c) => (
                 <li key={c.slug}>
                   <button 
@@ -208,7 +208,7 @@ export const Footer: React.FC = () => {
 
           {/* Contact & Newsletter Col */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">تماس و نمادها</h4>
+            <h3 className="text-white font-bold text-base border-b border-[#2D5A27] pb-2 font-heading">تماس و نمادها</h3>
             <div className="space-y-2 text-xs text-stone-300">
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" />
@@ -220,7 +220,7 @@ export const Footer: React.FC = () => {
               </p>
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                <span className="text-stone-400 text-[11px] leading-relaxed">
+                <span className="text-stone-300 text-[11px] leading-relaxed">
                   {siteContent.site.brand.address || 'تهران، خیابان ولیعصر، برج نیلوفر'}
                 </span>
               </p>
@@ -231,12 +231,12 @@ export const Footer: React.FC = () => {
               <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center flex flex-col items-center justify-center">
                 <Award className="w-5 h-5 text-[#D4AF37] mb-1" />
                 <span className="text-[10px] font-bold text-stone-200">نماد اعتماد الکترونیکی</span>
-                <span className="text-[9px] text-stone-400">اینماد ۵ ستاره</span>
+                <span className="text-[9px] text-stone-300">اینماد ۵ ستاره</span>
               </div>
               <div className="bg-white/10 p-2.5 rounded-xl border border-white/15 text-center flex flex-col items-center justify-center">
                 <ShieldCheck className="w-5 h-5 text-emerald-400 mb-1" />
                 <span className="text-[10px] font-bold text-stone-200">درگاه امن شاپرک</span>
-                <span className="text-[9px] text-stone-400">تراکنش شتاب</span>
+                <span className="text-[9px] text-stone-300">تراکنش شتاب</span>
               </div>
             </div>
 
@@ -247,7 +247,7 @@ export const Footer: React.FC = () => {
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="ایمیل شما جهت تخفیف‌ها..."
-                  className="w-full bg-transparent px-2.5 py-1.5 text-xs text-white placeholder-stone-400 focus:outline-hidden"
+                  className="w-full bg-transparent px-2.5 py-1.5 text-xs text-white placeholder-stone-300 focus:outline-hidden"
                 />
                 <button
                   type="submit"
@@ -262,24 +262,24 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom copyright */}
-        <div className="mt-12 pt-8 border-t border-[#2D5A27]/50 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+        <div className="mt-12 pt-8 border-t border-[#2D5A27]/50 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-300 gap-4">
           <p>© {toPersianDigits('1403')} تمامی حقوق برای بازار آنلاین گل و گیاه <strong>{siteContent.site.brand.name_fa} ({siteContent.site.brand.name_en})</strong> محفوظ است.</p>
           <div className="flex items-center gap-4 text-[11px]">
             <span>طراحی با عشق به طبیعت و گل‌های ایران 🌸</span>
-            <span className="text-stone-600">|</span>
+            <span className="text-stone-500">|</span>
             <button
               onClick={() => {
                 setActiveTab('admin');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="text-stone-500 hover:text-[#D4AF37] transition-colors flex items-center gap-1 cursor-pointer"
+              className="text-stone-300 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer"
               title="دسترسی مدیریت سامانه"
             >
-              <Lock className="w-3 h-3 text-[#D4AF37]/80" />
+              <Lock className="w-3 h-3 text-[#D4AF37]" />
               <span>ورود مدیریت</span>
             </button>
-            <span className="text-stone-600">|</span>
-            <span className="text-emerald-400 font-bold">SEO Grade A+</span>
+            <span className="text-stone-500">|</span>
+            <span className="text-emerald-300 font-bold">SEO Grade A+</span>
           </div>
         </div>
       </div>

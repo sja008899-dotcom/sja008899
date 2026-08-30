@@ -12,51 +12,51 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct, se
     // 1. Dynamic Title & Description configuration for high SEO ranking
     let pageTitle = 'گل آریس | بازار آنلاین گل و گیاه ایران و گلفروشی آنلاین (Golarys)';
     let metaDescription = 'گل آریس بازار آنلاین گل و گیاه ایران و گلفروشی آنلاین با تحویل ۲ ساعته. خرید اینترنتی دسته گل رز هلندی، گیاهان آپارتمانی مقاوم، باکس گل هدیه و سفال لالجین با عکاسی قبل از تحویل و ضمانت شادابی ۷ روزه.';
-    let canonicalUrl = 'https://golarys.ir/';
+    let canonicalUrl = 'https://www.golarys.ir/';
     let ogImage = 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=1200&h=630&q=85';
 
     if (selectedBlogArticle) {
       pageTitle = `${selectedBlogArticle.title} | مجله باغبانی گل آریس`;
       metaDescription = selectedBlogArticle.excerpt;
-      canonicalUrl = `https://golarys.ir/blog/${selectedBlogArticle.slug}`;
+      canonicalUrl = `https://www.golarys.ir/blog/${selectedBlogArticle.slug}`;
       ogImage = selectedBlogArticle.image;
     } else if (selectedProduct) {
       pageTitle = `خرید آنلاین ${selectedProduct.name} (${selectedProduct.nameEn}) | گلفروشی آنلاین گل آریس`;
       metaDescription = `${selectedProduct.description} - قیمت: ${selectedProduct.price.toLocaleString('fa-IR')} تومان. خرید از بازار گل ایران، ارسال فوری اسنپ، عکس گل قبل از ارسال و ضمانت شادابی ۷ روزه.`;
-      canonicalUrl = `https://golarys.ir/product/${selectedProduct.slug}`;
+      canonicalUrl = `https://www.golarys.ir/product/${selectedProduct.slug}`;
       ogImage = selectedProduct.image;
     } else {
       switch (activeTab) {
         case 'marketplace':
           pageTitle = 'بازار گل ایران | خرید آنلاین گل تازه، رز هلندی و گیاهان آپارتمانی - گل آریس';
           metaDescription = 'بازار آنلاین گل و گیاه ایران. خرید مستقیم انواع دسته گل رز، ارکیده، گیاهان آپارتمانی تصفیه‌کننده هوا و باکس گل لوکس با ارسال ۲ ساعته و عکاسی قبل از ارسال.';
-          canonicalUrl = 'https://golarys.ir/marketplace';
+          canonicalUrl = 'https://www.golarys.ir/marketplace';
           break;
         case 'handicrafts':
           pageTitle = 'خرید گلدان‌های دست‌ساز سرامیکی، سفال لالجین و صنایع دستی | گل آریس';
           metaDescription = 'انواع گلدان سفالی و سرامیکی هنر دست لالجین همدان، آویزهای مکرومه‌بافی پنبه‌ای و گلدان‌های مسی چکشی شیراز با بسته‌بندی ضدضربه.';
-          canonicalUrl = 'https://golarys.ir/handicrafts';
+          canonicalUrl = 'https://www.golarys.ir/handicrafts';
           ogImage = 'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&h=630&q=85';
           break;
         case 'sellers':
           pageTitle = 'همکاری و ثبت نام گلفروشان و باغبانان خانگی | گل آریس';
           metaDescription = 'فروشگاه گل و گیاه خود را آنلاین کنید. دسترسی به خریداران سراسر کشور بدون کارمزد ماه اول و تسویه حساب روزانه در گل آریس.';
-          canonicalUrl = 'https://golarys.ir/sellers';
+          canonicalUrl = 'https://www.golarys.ir/sellers';
           break;
         case 'about':
           pageTitle = 'داستان شکل‌گیری گل آریس و دختر گل | درباره ما';
           metaDescription = 'آشنایی با ارزش‌ها، ماموریت و چشم‌انداز گل آریس در حمایت از تولیدکنندگان بومی، بانوان سرپرست خانوار و محیط زیست.';
-          canonicalUrl = 'https://golarys.ir/about';
+          canonicalUrl = 'https://www.golarys.ir/about';
           break;
         case 'blog':
           pageTitle = 'مجله گل و گیاه و راهنمای نگهداری گیاهان | وبلاگ گل آریس';
           metaDescription = 'آموزش‌های تخصصی آبیاری، تعویض خاک، نور مناسب گیاهان آپارتمانی، نمادشناسی گل‌ها و دکوراسیون با گل‌های طبیعی.';
-          canonicalUrl = 'https://golarys.ir/blog';
+          canonicalUrl = 'https://www.golarys.ir/blog';
           break;
         case 'contact':
           pageTitle = 'تماس با ما و مشاوره رایگان انتخاب گل | گل آریس';
           metaDescription = 'پشتیبانی ۲۴ ساعته تلفنی و آنلاین، آدرس دفاتر گل آریس در تهران و ثبت سفارش‌های سازمانی و تشریفات.';
-          canonicalUrl = 'https://golarys.ir/contact';
+          canonicalUrl = 'https://www.golarys.ir/contact';
           break;
         case 'admin':
           pageTitle = 'پنل مدیریت محتوا و تنظیمات Decap CMS | گل آریس';
@@ -182,7 +182,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({ activeTab, selectedProduct, se
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": "https://golarys.ir/"
+            "item": "https://www.golarys.ir/"
           },
           {
             "@type": "ListItem",

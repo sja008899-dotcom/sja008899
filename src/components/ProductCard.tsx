@@ -90,12 +90,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         
         {/* Vendor & Category details */}
         <div>
-          <div className="flex items-center justify-between text-xs text-stone-500 mb-1.5">
-            <span className="flex items-center gap-1 text-[#2D5A27] font-medium bg-[#2D5A27]/8 px-2 py-0.5 rounded-md">
-              <Store className="w-3 h-3" />
+          <div className="flex items-center justify-between text-xs text-stone-600 mb-1.5 font-medium">
+            <span className="flex items-center gap-1 text-[#1F3F1B] font-bold bg-[#2D5A27]/10 px-2 py-0.5 rounded-md">
+              <Store className="w-3 h-3 text-[#2D5A27]" />
               {product.vendor.name}
             </span>
-            <span className="text-[11px] text-stone-400">
+            <span className="text-[11px] text-stone-600 font-medium">
               {product.vendor.city}
             </span>
           </div>
@@ -108,14 +108,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.name}
           </h3>
 
-          <p className="text-xs text-stone-500 mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-stone-600 mt-1 line-clamp-2 leading-relaxed font-medium">
             {product.description}
           </p>
         </div>
 
         {/* Freshness / Handmade guarantee pill */}
-        <div className="flex items-center gap-1 text-[11px] text-[#2D5A27] font-medium pt-1">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
+        <div className="flex items-center gap-1 text-[11px] text-[#1F3F1B] font-bold pt-1">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#2D5A27]" />
           <span>
             {product.categorySlug === 'handicrafts'
               ? 'تضمین اصالت اثر و ارسال ضدضربه'
@@ -127,7 +127,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="pt-2 border-t border-stone-100 flex items-center justify-between gap-2">
           <div>
             {product.originalPrice && (
-              <span className="block text-[11px] text-stone-400 line-through">
+              <span className="block text-[11px] text-stone-600 font-semibold line-through">
                 {formatToman(product.originalPrice)}
               </span>
             )}
@@ -139,6 +139,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => addToCart(product, 1)}
+              aria-label={`افزودن ${product.name} به سبد خرید`}
               className="px-3.5 py-2.5 rounded-xl bg-[#2D5A27] hover:bg-[#1F3F1B] text-white text-xs font-bold shadow-xs hover:shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
               title="افزودن به سبد خرید"
             >

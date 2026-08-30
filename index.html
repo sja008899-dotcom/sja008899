@@ -38,6 +38,10 @@
     <meta name="theme-color" content="#172E14" />
     <link rel="manifest" href="/manifest.json" />
 
+    <!-- Performance preconnects -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
     <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
     <script type="application/ld+json">
     {
@@ -137,7 +141,7 @@
   <body class="bg-stone-50 text-stone-900 font-sans antialiased selection:bg-[#D4AF37] selection:text-[#172E14]">
     
     <!-- SEO Static Content Layer (Instantly crawlable by Googlebot even before JS executes) -->
-    <div id="seo-crawlable-content" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+    <div id="seo-crawlable-content" class="sr-only">
       <header>
         <h1>گل آریس - بازار آنلاین گل و گیاه و گلفروشی آنلاین ایران (Golarys)</h1>
         <p>خرید آنلاین انواع گل تازه، سفارش باکس گل رز هلندی، سبد گل، تاج گل ترحیم و افتتاحیه، گیاهان آپارتمانی و گلدان‌های سرامیکی لالجین همدان با تحویل فوری ۳ ساعته در سراسر تهران و شهرستان‌ها.</p>

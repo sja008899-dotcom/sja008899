@@ -233,6 +233,10 @@ export const HeroSection: React.FC = () => {
                 <img
                   src={currentMedia.image}
                   alt={currentMedia.title}
+                  width={700}
+                  height={525}
+                  loading="eager"
+                  decoding="sync"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 
@@ -255,9 +259,9 @@ export const HeroSection: React.FC = () => {
                     <Star className="w-4 h-4 fill-[#D4AF37]" />
                     <span className="text-xs text-stone-200 mr-1 font-bold">{currentMedia.rating}</span>
                   </div>
-                  <h3 className="text-base sm:text-lg font-black font-heading leading-tight">
+                  <h2 className="text-base sm:text-lg font-black font-heading leading-tight text-white">
                     {currentMedia.title}
-                  </h3>
+                  </h2>
                   <p className="text-xs text-stone-200 line-clamp-2">
                     {currentMedia.subtitle}
                   </p>

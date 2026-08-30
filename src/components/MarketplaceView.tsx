@@ -187,11 +187,15 @@ export const MarketplaceView: React.FC = () => {
           {/* Sort & Quick In-Stock Switch */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-stone-500 font-semibold hidden md:inline">مرتب‌سازی:</span>
+              <label htmlFor="marketplace-sort-select" className="text-stone-700 font-bold hidden md:inline">
+                مرتب‌سازی:
+              </label>
               <select
+                id="marketplace-sort-select"
+                aria-label="مرتب‌سازی محصولات بازارچه"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5 text-xs text-stone-700 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#2D5A27]/20 cursor-pointer"
+                className="bg-stone-50 border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 font-bold focus:outline-hidden focus:ring-2 focus:ring-[#2D5A27]/20 cursor-pointer"
               >
                 <option value="bestseller">محبوب‌ترین و پرفروش</option>
                 <option value="price_asc">ارزان‌ترین قیمت</option>
@@ -200,7 +204,7 @@ export const MarketplaceView: React.FC = () => {
               </select>
             </div>
 
-            <label className="flex items-center gap-2 text-xs font-semibold text-stone-700 cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-xs font-bold text-stone-800 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={onlyInStock}
@@ -311,7 +315,7 @@ export const MarketplaceView: React.FC = () => {
               <div className="w-12 h-12 rounded-full bg-[#D4AF37] text-[#1F3F1B] flex items-center justify-center mx-auto text-xl shadow-md">
                 💌
               </div>
-              <h4 className="font-bold text-sm text-white">۳ تم کارت پستال رایگان</h4>
+              <h3 className="font-bold text-sm text-white">۳ تم کارت پستال رایگان</h3>
               <p className="text-xs text-stone-200">
                 طلایی سلطنتی، سبز زمردی گل آریس و رمانتیک پاستلی
               </p>
@@ -323,7 +327,7 @@ export const MarketplaceView: React.FC = () => {
       {/* 5. Values & Commitments Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+          <span className="text-xs font-black text-[#8C6D1F] bg-[#8C6D1F]/10 px-3 py-1 rounded-full uppercase tracking-wider">
             چرا گل آریس؟
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-[#1F3F1B] font-heading">
@@ -344,7 +348,7 @@ export const MarketplaceView: React.FC = () => {
                 <h3 className="font-bold text-base text-stone-900 font-heading mb-1.5">
                   {v.title}
                 </h3>
-                <p className="text-xs text-stone-500 leading-relaxed">
+                <p className="text-xs text-stone-600 leading-relaxed font-medium">
                   {v.text}
                 </p>
               </div>
@@ -360,7 +364,7 @@ export const MarketplaceView: React.FC = () => {
             <h2 className="text-2xl sm:text-3xl font-black text-[#1F3F1B] font-heading">
               گلفروشان و پرورش‌دهندگان برگزیده
             </h2>
-            <p className="text-xs sm:text-sm text-stone-500 mt-1">
+            <p className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">
               مستقیماً از هنرمندان و عاشقان گل در شهر خودتان خرید کنید
             </p>
           </div>
@@ -383,19 +387,22 @@ export const MarketplaceView: React.FC = () => {
                   src={vendor.avatar}
                   alt={vendor.name}
                   className="w-14 h-14 rounded-2xl object-cover ring-2 ring-[#D4AF37]/40"
+                  width={56}
+                  height={56}
+                  loading="lazy"
                 />
                 <div>
-                  <h4 className="font-bold text-sm text-stone-900">{vendor.name}</h4>
-                  <span className="text-xs text-stone-500 block">{vendor.city}</span>
-                  <div className="flex items-center gap-1 text-[#D4AF37] text-xs font-bold mt-0.5">
+                  <h3 className="font-bold text-sm text-stone-900">{vendor.name}</h3>
+                  <span className="text-xs text-stone-600 font-medium block">{vendor.city}</span>
+                  <div className="flex items-center gap-1 text-[#8C6D1F] text-xs font-bold mt-0.5">
                     <Star className="w-3.5 h-3.5 fill-[#D4AF37]" />
                     <span>{toPersianDigits(vendor.rating)}</span>
-                    <span className="text-stone-400 font-normal">({toPersianDigits(vendor.reviewsCount)} نظر)</span>
+                    <span className="text-stone-600 font-medium">({toPersianDigits(vendor.reviewsCount)} نظر)</span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-stone-700 line-clamp-2 leading-relaxed font-normal">
                 {vendor.bio}
               </p>
 
@@ -403,7 +410,7 @@ export const MarketplaceView: React.FC = () => {
                 <span className="text-[11px] font-bold text-[#2D5A27] bg-[#2D5A27]/10 px-2 py-0.5 rounded-lg">
                   {vendor.badge}
                 </span>
-                <span className="text-[11px] text-stone-400">
+                <span className="text-[11px] text-stone-600 font-semibold">
                   {vendor.deliveryMethods.includes('snap') ? '🚀 اسنپ ۲ ساعته' : '📦 تیپاکس'}
                 </span>
               </div>
@@ -416,7 +423,7 @@ export const MarketplaceView: React.FC = () => {
       <section className="bg-[#F8F9F6] py-14 border-y border-stone-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">
+            <span className="text-xs font-black text-[#8C6D1F] bg-[#8C6D1F]/10 px-3 py-1 rounded-full uppercase tracking-wider">
               نظرات خریداران
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-[#1F3F1B] font-heading">
@@ -436,7 +443,7 @@ export const MarketplaceView: React.FC = () => {
                       <Star key={i} className="w-4 h-4 fill-[#D4AF37]" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-stone-700 leading-relaxed font-medium">
                     «{t.text}»
                   </p>
                 </div>
@@ -446,10 +453,13 @@ export const MarketplaceView: React.FC = () => {
                     src={t.image}
                     alt={t.name}
                     className="w-10 h-10 rounded-full object-cover"
+                    width={40}
+                    height={40}
+                    loading="lazy"
                   />
                   <div>
-                    <h4 className="font-bold text-xs text-stone-900">{t.name}</h4>
-                    <span className="text-[11px] text-stone-400">خریدار تایید شده</span>
+                    <h3 className="font-bold text-xs text-stone-900">{t.name}</h3>
+                    <span className="text-[11px] text-stone-600 font-medium">خریدار تایید شده</span>
                   </div>
                 </div>
               </div>

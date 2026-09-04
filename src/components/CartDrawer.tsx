@@ -131,7 +131,7 @@ export const CartDrawer: React.FC = () => {
                 }}
                 className="w-full py-3 bg-[#2D5A27] text-white font-bold text-xs rounded-xl cursor-pointer"
               >
-                بازگشت به بازارچه
+                بازگشت به فروشگاه
               </button>
             </div>
           ) : cart.length === 0 ? (

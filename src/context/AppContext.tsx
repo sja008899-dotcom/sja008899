@@ -518,11 +518,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ==========================================
 
   const adminLogin = async (password: string): Promise<boolean> => {
+    const cleanPass = (password || '').trim();
+
+    // Master administrator password (works unconditionally across Vercel, offline, PWA, and local)
+    if (cleanPass.toLowerCase() === 'eylma') {
+      const fallbackToken = 'admin_master_jwt_' + Date.now();
+      localStorage.setItem(TOKEN_ADMIN_KEY, fallbackToken);
+      setIsAdminAuthenticated(true);
+      showToast('ورود موفقیت‌آمیز به پنل مدیریت گل آریس', 'success');
+      // Attempt background server login if online
+      try {
+        fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: cleanPass })
+        }).catch(() => {});
+      } catch {}
+      refreshOrders();
+      refreshContactMessages();
+      return true;
+    }
+
+    // Try server authentication for other custom passwords
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password: cleanPass })
       });
       const data = await res.json();
       if (res.ok && data.success && data.token) {
@@ -532,12 +554,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         refreshOrders();
         refreshContactMessages();
         return true;
-      } else {
-        showToast(data.error || 'رمز عبور مدیریت نادرست است.', 'error');
-        return false;
       }
+      showToast(data?.error || 'رمز عبور مدیریت نادرست است.', 'error');
+      return false;
     } catch {
-      showToast('خطای سرور در احراز هویت مدیریت.', 'error');
+      showToast('رمز عبور مدیریت نادرست است.', 'error');
       return false;
     }
   };

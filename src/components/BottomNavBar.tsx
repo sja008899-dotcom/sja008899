@@ -54,7 +54,7 @@ export const BottomNavBar: React.FC = () => {
           <span className="text-[10px] tracking-tight">خانه</span>
         </button>
 
-        {/* 2. Marketplace */}
+        {/* 2. Marketplace / Shop */}
         <button
           onClick={() => handleTabClick('marketplace')}
           className={`flex flex-col items-center justify-center gap-1 py-1 transition-all ${
@@ -69,7 +69,7 @@ export const BottomNavBar: React.FC = () => {
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#2D5A27] rounded-full" />
             )}
           </div>
-          <span className="text-[10px] tracking-tight">بازارچه</span>
+          <span className="text-[10px] tracking-tight">فروشگاه</span>
         </button>
 
         {/* 3. Cart with Badge */}

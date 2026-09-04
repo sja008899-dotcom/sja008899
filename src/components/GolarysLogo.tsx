@@ -50,19 +50,19 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
     >
       {/* Official Master Golarys Golden Iris Jewel Logo */}
       <div 
-        className={`relative shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${imgSize}`}
+        className={`relative shrink-0 flex items-center justify-center rounded-2xl bg-[#172E14] border border-[#D4AF37]/50 shadow-md shadow-[#172E14]/40 overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:border-[#D4AF37] p-1 ${imgSize}`}
         style={{ width: `${px}px`, height: `${px}px` }}
       >
         <img
-          src="/logo-transparent.png"
+          src="/logo-gold.png?v=20260904"
           alt="لوگوی رسمی گل آریس (Golarys)"
-          className="w-full h-full object-contain filter drop-shadow-[0_4px_10px_rgba(212,175,55,0.35)]"
+          className="w-full h-full object-cover rounded-xl filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
           loading="eager"
           decoding="sync"
           onError={(e) => {
             if (!imgError) {
               setImgError(true);
-              (e.target as HTMLImageElement).src = '/logo-gold.png';
+              (e.target as HTMLImageElement).src = '/logo-512.png?v=20260904';
             }
           }}
         />
@@ -98,7 +98,7 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
               size === 'xs' || size === 'sm' ? 'text-[10px]' : 'text-[11px]'
             }`}
           >
-            بازار آنلاین گل، گیاه و صنایع دستی
+            فروشگاه آنلاین گل، گیاه و صنایع دستی
           </span>
         </div>
       )}

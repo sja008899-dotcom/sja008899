@@ -144,44 +144,46 @@ export const AdminPanel: React.FC = () => {
   // If not authenticated, render password lock screen
   if (!isAdminAuthenticated) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center p-4">
-        <div className="bg-white max-w-md w-full rounded-3xl shadow-2xl border border-stone-200 overflow-hidden">
+      <div className="min-h-[75vh] flex items-center justify-center p-4">
+        <div className="bg-[#172E14] text-white max-w-md w-full rounded-3xl shadow-2xl border-2 border-[#D4AF37]/50 overflow-hidden">
           
-          <div className="bg-gradient-to-l from-[#1F3F1B] to-[#2D5A27] text-white p-8 text-center space-y-3">
+          <div className="bg-gradient-to-b from-[#122410] to-[#172E14] text-white p-8 text-center space-y-3 border-b border-[#D4AF37]/20">
             <GolarysLogo size="md" iconOnly={false} variant="light" />
             <div className="pt-2">
-              <div className="w-12 h-12 bg-white/10 text-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto border border-white/20 mb-2">
-                <Lock className="w-6 h-6" />
+              <div className="w-14 h-14 bg-[#D4AF37]/20 text-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto border border-[#D4AF37]/40 mb-2 shadow-lg">
+                <Lock className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-black font-heading text-white">
+              <h2 className="text-xl font-black font-heading text-white">
                 ورود به پنل مدیریت گل آریس
               </h2>
-              <p className="text-xs text-stone-200">
+              <p className="text-xs text-stone-200 mt-1">
                 جهت دسترسی به سفارش‌های دریافتی، تغییر قیمت‌ها و مدیریت محتوا، رمز عبور را وارد نمایید
               </p>
             </div>
           </div>
 
-          <form onSubmit={handleAdminPasswordSubmit} className="p-6 sm:p-8 space-y-4">
+          <form onSubmit={handleAdminPasswordSubmit} className="p-6 sm:p-8 space-y-5 bg-[#172E14]">
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                رمز عبور مدیریت:
-              </label>
+              <div className="mb-1.5">
+                <label className="block text-xs font-bold text-stone-200">
+                  رمز عبور مدیریت:
+                </label>
+              </div>
               <div className="relative">
                 <input
                   type={showLockPass ? 'text' : 'password'}
                   required
-                  placeholder="رمز عبور مدیر را وارد کنید..."
+                  placeholder="رمز عبور محرمانه مدیر را وارد نمایید..."
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full pl-10 pr-10 py-3.5 bg-stone-50 border border-stone-300 rounded-xl text-sm font-bold text-stone-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D5A27]"
+                  className="w-full pl-10 pr-10 py-3.5 bg-black/40 border border-[#D4AF37]/40 rounded-xl text-sm font-bold text-white placeholder-stone-400 focus:bg-black/60 focus:outline-hidden focus:ring-2 focus:ring-[#D4AF37]"
                   autoFocus
                 />
-                <Lock className="w-4 h-4 text-stone-400 absolute right-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-[#D4AF37] absolute right-3.5 top-1/2 -translate-y-1/2" />
                 <button
                   type="button"
                   onClick={() => setShowLockPass(!showLockPass)}
-                  className="p-1.5 text-stone-400 hover:text-stone-700 absolute left-2.5 top-1/2 -translate-y-1/2 cursor-pointer"
+                  className="p-1.5 text-stone-300 hover:text-white absolute left-2.5 top-1/2 -translate-y-1/2 cursor-pointer"
                   title={showLockPass ? 'مخفی‌سازی رمز' : 'نمایش رمز'}
                 >
                   {showLockPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -191,21 +193,21 @@ export const AdminPanel: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 bg-[#D4AF37] hover:bg-[#BF9B2D] text-[#172E14] font-black text-sm rounded-xl shadow-xl shadow-[#D4AF37]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+              <ShieldCheck className="w-4 h-4 text-[#172E14]" />
               <span>تایید و ورود به مدیریت</span>
             </button>
 
-            <div className="pt-3 text-center border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+            <div className="pt-3 text-center border-t border-white/15 flex items-center justify-between text-xs text-stone-300">
               <button
                 type="button"
                 onClick={() => setActiveTab('home')}
-                className="hover:text-stone-900 underline cursor-pointer"
+                className="hover:text-white underline cursor-pointer"
               >
                 بازگشت به فروشگاه
               </button>
-              <span className="text-[11px] text-stone-400">سیستم امنیتی گل آریس</span>
+              <span className="text-[11px] text-[#D4AF37]">سیستم امنیتی گل آریس</span>
             </div>
           </form>
 
@@ -1078,7 +1080,7 @@ export const AdminPanel: React.FC = () => {
               افزودن گل، گیاه یا محصول صنایع دستی جدید
             </h3>
             <p className="text-xs text-stone-500">
-              این محصول بلافاصله در بازارچه آنلاین قرار گرفته و قابل سفارش خواهد بود
+              این محصول بلافاصله در فروشگاه آنلاین قرار گرفته و قابل سفارش خواهد بود
             </p>
           </div>
 
@@ -1179,7 +1181,7 @@ export const AdminPanel: React.FC = () => {
               className="w-full py-3.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Plus className="w-4 h-4 text-[#D4AF37]" />
-              <span>انتشار آنی محصول در بازارچه</span>
+              <span>انتشار آنی محصول در فروشگاه</span>
             </button>
           </form>
         </div>

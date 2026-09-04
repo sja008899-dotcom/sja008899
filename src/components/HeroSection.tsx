@@ -50,10 +50,11 @@ export const HeroSection: React.FC = () => {
   const currentMedia = mediaHighlights[activeMediaTab];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F3F7F0] via-[#FAFBF8] to-[#FCFCFA] py-10 md:py-16 border-b border-stone-200/80">
-      {/* Decorative ambient background glows */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#2D5A27]/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-96 h-96 bg-[#D4AF37]/15 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#122410] via-[#172E14] to-[#1C3818] py-12 md:py-18 border-b border-[#D4AF37]/30 text-white">
+      {/* Decorative ambient golden & emerald floral glow */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#D4AF37]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-10 w-96 h-96 bg-[#2D5A27]/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#D4AF37]/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -61,11 +62,11 @@ export const HeroSection: React.FC = () => {
           {/* Right Column (Headlines, Search Highlights, Quick CTAs) */}
           <div className="lg:col-span-7 space-y-6">
             
-            {/* Live Status Pill */}
-            <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md text-[#1F3F1B] px-4 py-2 rounded-full text-xs font-extrabold border border-[#2D5A27]/20 shadow-xs">
+            {/* Live Status Pill with Golden Flower */}
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-[#FAF0E6] px-4 py-2 rounded-full text-xs font-extrabold border border-[#D4AF37]/40 shadow-lg shadow-black/20">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2D5A27]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D4AF37]"></span>
               </span>
               <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
               <span>بازار آنلاین گل و گیاه ایران | گلفروشی آنلاین با ارسال ۲ ساعته</span>
@@ -73,16 +74,16 @@ export const HeroSection: React.FC = () => {
 
             {/* Main Headline with High-Impact Persian Keywords */}
             <div className="space-y-2">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-[#1F3F1B] leading-tight font-heading">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight font-heading">
                 بازار بزرگ گل و گیاه ایران؛ <br />
-                <span className="text-[#2D5A27]">
+                <span className="text-[#D4AF37] drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
                   خرید آنلاین گل تازه
                 </span> مستقیم از باغبان
               </h1>
             </div>
 
             {/* Persian Search Friendly Subheadline */}
-            <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-2xl font-medium">
+            <p className="text-base sm:text-lg text-stone-200 leading-relaxed max-w-2xl font-medium">
               سامانه سراسری سفارش اینترنتی انواع دسته گل رز هلندی، گیاهان آپارتمانی تصفیه‌کننده هوا، باکس هدیه لوکس و صنایع دستی لالجین با عکاسی قبل از ارسال و تضمین شادابی ۷ روزه.
             </p>
 
@@ -93,10 +94,10 @@ export const HeroSection: React.FC = () => {
                   setActiveTab('marketplace');
                   window.scrollTo({ top: 480, behavior: 'smooth' });
                 }}
-                className="px-7 py-3.5 rounded-2xl bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-sm sm:text-base shadow-xl shadow-[#2D5A27]/25 hover:shadow-2xl hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer group"
+                className="px-7 py-3.5 rounded-2xl bg-[#D4AF37] hover:bg-[#BF9B2D] text-[#172E14] font-black text-sm sm:text-base shadow-xl shadow-[#D4AF37]/30 hover:shadow-2xl hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer group"
               >
-                <span>مشاهده بازارچه و خرید آنلاین</span>
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#D4AF37]" />
+                <span>مشاهده فروشگاه و خرید آنلاین</span>
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#172E14]" />
               </button>
 
               <button
@@ -104,15 +105,15 @@ export const HeroSection: React.FC = () => {
                   setSelectedCategory('roses');
                   setActiveTab('marketplace');
                 }}
-                className="px-5 py-3.5 rounded-2xl bg-white hover:bg-stone-50 text-[#1F3F1B] font-bold text-sm border border-stone-300 hover:border-[#2D5A27]/40 shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                className="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-[#D4AF37]/40 shadow-xs backdrop-blur-sm transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <Flame className="w-4 h-4 text-rose-500" />
+                <Flame className="w-4 h-4 text-rose-400" />
                 <span>سفارش دسته گل رز</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('sellers')}
-                className="px-4 py-3.5 rounded-2xl bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#1F3F1B] font-bold text-xs sm:text-sm border border-[#D4AF37]/40 flex items-center gap-1.5 cursor-pointer transition-colors"
+                className="px-4 py-3.5 rounded-2xl bg-[#2D5A27]/60 hover:bg-[#2D5A27] text-white font-bold text-xs sm:text-sm border border-emerald-500/40 flex items-center gap-1.5 cursor-pointer transition-colors"
               >
                 <Store className="w-4 h-4 text-[#D4AF37]" />
                 <span>ورود باغبانان و غرفه‌داران</span>
@@ -120,7 +121,7 @@ export const HeroSection: React.FC = () => {
 
               <button
                 onClick={() => setIsMobileAppModalOpen(true)}
-                className="px-4 py-3.5 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm border border-stone-700 flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all group"
+                className="px-4 py-3.5 rounded-2xl bg-black/40 hover:bg-black/60 text-white font-bold text-xs sm:text-sm border border-white/20 flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all group"
                 title="دانلود مستقیم اپلیکیشن اندروید و آیفون"
               >
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -129,12 +130,12 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Popular Persian Search Categories */}
-            <div className="pt-4 border-t border-stone-200/90">
+            <div className="pt-4 border-t border-white/15">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-stone-500 font-bold">
+                <span className="text-xs text-stone-300 font-bold">
                   دسته‌بندی‌های پرجستجو در بازار گل ایران:
                 </span>
-                <span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] text-[#D4AF37] font-bold bg-[#D4AF37]/15 border border-[#D4AF37]/30 px-2 py-0.5 rounded-md">
                   تخفیف ویژه گل‌های امروز 🏷️
                 </span>
               </div>
@@ -155,7 +156,7 @@ export const HeroSection: React.FC = () => {
                       setActiveTab('marketplace');
                       window.scrollTo({ top: 520, behavior: 'smooth' });
                     }}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white hover:bg-[#2D5A27] hover:text-white text-stone-700 border border-stone-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-[#D4AF37] hover:text-[#172E14] text-stone-200 border border-white/15 shadow-2xs hover:shadow-xs transition-all cursor-pointer backdrop-blur-xs"
                   >
                     {cat.name}
                   </button>
@@ -165,25 +166,25 @@ export const HeroSection: React.FC = () => {
 
             {/* Quick Metrics Bar with Persian Trust Badges */}
             <div className="grid grid-cols-3 gap-3 pt-2">
-              <div className="bg-white/90 backdrop-blur-xs p-3.5 rounded-2xl border border-stone-200/90 shadow-2xs text-center">
-                <span className="block text-lg sm:text-xl font-black text-[#2D5A27] font-heading">
+              <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-[#D4AF37]/25 shadow-sm text-center">
+                <span className="block text-lg sm:text-xl font-black text-[#D4AF37] font-heading">
                   +{toPersianDigits(500)}
                 </span>
-                <span className="text-[11px] text-stone-600 font-bold">باغبان و گلفروش فعال</span>
+                <span className="text-[11px] text-stone-200 font-bold">باغبان و گلفروش فعال</span>
               </div>
 
-              <div className="bg-white/90 backdrop-blur-xs p-3.5 rounded-2xl border border-stone-200/90 shadow-2xs text-center">
-                <span className="block text-lg sm:text-xl font-black text-[#2D5A27] font-heading">
+              <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-[#D4AF37]/25 shadow-sm text-center">
+                <span className="block text-lg sm:text-xl font-black text-[#D4AF37] font-heading">
                   {toPersianDigits(2)} ساعته
                 </span>
-                <span className="text-[11px] text-stone-600 font-bold">ارسال اکسپرس در تهران</span>
+                <span className="text-[11px] text-stone-200 font-bold">ارسال اکسپرس در تهران</span>
               </div>
 
-              <div className="bg-white/90 backdrop-blur-xs p-3.5 rounded-2xl border border-stone-200/90 shadow-2xs text-center">
-                <span className="block text-lg sm:text-xl font-black text-[#2D5A27] font-heading">
+              <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-[#D4AF37]/25 shadow-sm text-center">
+                <span className="block text-lg sm:text-xl font-black text-[#D4AF37] font-heading">
                   {toPersianDigits(7)} روز
                 </span>
-                <span className="text-[11px] text-stone-600 font-bold">ضمانت شادابی واقعی</span>
+                <span className="text-[11px] text-stone-200 font-bold">ضمانت شادابی واقعی</span>
               </div>
             </div>
 
@@ -193,13 +194,13 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-5 relative">
             
             {/* Interactive Tab Selector on top of Media Card */}
-            <div className="flex items-center justify-center gap-1.5 mb-3 bg-stone-200/60 p-1.5 rounded-2xl backdrop-blur-xs max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-1.5 mb-3 bg-black/40 p-1.5 rounded-2xl backdrop-blur-md max-w-md mx-auto border border-white/15">
               <button
                 onClick={() => setActiveMediaTab('bloom')}
                 className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeMediaTab === 'bloom'
-                    ? 'bg-white text-[#1F3F1B] shadow-xs'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#D4AF37] text-[#172E14] shadow-md font-black'
+                    : 'text-stone-300 hover:text-white'
                 }`}
               >
                 🌹 گل تازه روز
@@ -208,8 +209,8 @@ export const HeroSection: React.FC = () => {
                 onClick={() => setActiveMediaTab('arranging')}
                 className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeMediaTab === 'arranging'
-                    ? 'bg-white text-[#1F3F1B] shadow-xs'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#D4AF37] text-[#172E14] shadow-md font-black'
+                    : 'text-stone-300 hover:text-white'
                 }`}
               >
                 ✨ گل‌آرایی لوکس
@@ -218,8 +219,8 @@ export const HeroSection: React.FC = () => {
                 onClick={() => setActiveMediaTab('craft')}
                 className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeMediaTab === 'craft'
-                    ? 'bg-white text-[#1F3F1B] shadow-xs'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#D4AF37] text-[#172E14] shadow-md font-black'
+                    : 'text-stone-300 hover:text-white'
                 }`}
               >
                 🏺 سفال لالجین
@@ -229,7 +230,7 @@ export const HeroSection: React.FC = () => {
             <div className="relative mx-auto max-w-md lg:max-w-none">
               
               {/* Main Media Showcase Card */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-stone-900/10 aspect-4/3 sm:aspect-4/4 group bg-stone-900">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#D4AF37]/50 ring-2 ring-black/40 aspect-4/3 sm:aspect-4/4 group bg-stone-900">
                 <img
                   src={currentMedia.image}
                   alt={currentMedia.title}
@@ -241,10 +242,10 @@ export const HeroSection: React.FC = () => {
                 />
                 
                 {/* Dynamic Vignette / Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                 
                 {/* Top Badge: Live Photo Proof */}
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md border border-[#D4AF37]/40 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
                   <Camera className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span className="font-bold">{currentMedia.badge}</span>
                 </div>
@@ -269,24 +270,24 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* Floating Top-Left Tag: 2-Hour Delivery */}
-              <div className="absolute -top-4 -left-3 sm:-left-6 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-stone-200 flex items-center gap-2.5 z-20">
-                <div className="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center font-bold">
+              <div className="absolute -top-4 -left-3 sm:-left-6 bg-[#172E14]/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-[#D4AF37]/40 flex items-center gap-2.5 z-20 text-white">
+                <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/20 text-[#D4AF37] flex items-center justify-center font-bold">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="block text-xs font-bold text-stone-800">ارسال اکسپرس ۲ ساعته</span>
-                  <span className="text-[10px] text-stone-500">پیک اختصاصی در تهران و کرج</span>
+                  <span className="block text-xs font-bold text-white">ارسال اکسپرس ۲ ساعته</span>
+                  <span className="text-[10px] text-stone-300">پیک اختصاصی در تهران و کرج</span>
                 </div>
               </div>
 
               {/* Floating Bottom-Right Card: Freshness Guarantee */}
-              <div className="absolute -bottom-4 -right-3 sm:-right-6 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-stone-200 flex items-center gap-2.5 z-20">
-                <div className="w-9 h-9 rounded-xl bg-[#2D5A27] text-white flex items-center justify-center font-bold">
+              <div className="absolute -bottom-4 -right-3 sm:-right-6 bg-[#172E14]/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-[#D4AF37]/40 flex items-center gap-2.5 z-20 text-white">
+                <div className="w-9 h-9 rounded-xl bg-[#2D5A27] text-white flex items-center justify-center font-bold border border-[#D4AF37]/30">
                   <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
                 </div>
                 <div>
-                  <span className="block text-xs font-bold text-stone-800">تضمین ۱۰۰٪ تازگی گل</span>
-                  <span className="text-[10px] text-[#2D5A27] font-bold">ارسال مستقیم از باغ گل محلات</span>
+                  <span className="block text-xs font-bold text-white">تضمین ۱۰۰٪ تازگی گل</span>
+                  <span className="text-[10px] text-[#D4AF37] font-bold">ارسال مستقیم از باغ گل محلات</span>
                 </div>
               </div>
 

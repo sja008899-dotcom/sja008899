@@ -155,7 +155,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button onClick={() => { setActiveTab('marketplace'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#D4AF37] transition-colors cursor-pointer">
-                  بازارچه و محصولات گل
+                  فروشگاه و محصولات گل
                 </button>
               </li>
               <li>

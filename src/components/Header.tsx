@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
 
   const navItems: { id: ActiveTab; labelFa: string; labelEn: string }[] = [
     { id: 'home', labelFa: 'خانه', labelEn: 'Home' },
-    { id: 'marketplace', labelFa: 'بازارچه گل و گیاه', labelEn: 'Marketplace' },
+    { id: 'marketplace', labelFa: 'فروشگاه گل و گیاه', labelEn: 'Shop' },
     { id: 'handicrafts', labelFa: 'صنایع دستی و گلدان', labelEn: 'Handicrafts' },
     { id: 'sellers', labelFa: 'برای فروشندگان', labelEn: 'For Sellers' },
     { id: 'about', labelFa: 'درباره ما', labelEn: 'About Us' },

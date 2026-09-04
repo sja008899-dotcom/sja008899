@@ -31,8 +31,8 @@
   ],
   "shortcuts": [
     {
-      "name": "بازارچه گل و گیاه",
-      "short_name": "بازارچه",
+      "name": "فروشگاه گل و گیاه",
+      "short_name": "فروشگاه",
       "description": "مشاهده و خرید آنلاین گل‌های طبیعی و گیاهان آپارتمانی",
       "url": "/?tab=marketplace",
       "icons": [{ "src": "/logo-192.png", "sizes": "192x192" }]

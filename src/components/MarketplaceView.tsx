@@ -192,7 +192,7 @@ export const MarketplaceView: React.FC = () => {
               </label>
               <select
                 id="marketplace-sort-select"
-                aria-label="مرتب‌سازی محصولات بازارچه"
+                aria-label="مرتب‌سازی محصولات فروشگاه"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
                 className="bg-stone-50 border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 font-bold focus:outline-hidden focus:ring-2 focus:ring-[#2D5A27]/20 cursor-pointer"
@@ -270,7 +270,7 @@ export const MarketplaceView: React.FC = () => {
                 }}
                 className="px-5 py-2.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
               >
-                مشاهده تمام محصولات بازارچه
+                مشاهده تمام محصولات فروشگاه
               </button>
             </div>
           </div>

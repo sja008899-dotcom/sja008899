@@ -31,7 +31,7 @@ export const SitemapModal: React.FC<SitemapModalProps> = ({ isOpen, onClose }) =
 
   const routes = [
     { title: 'صفحه اصلی گل آریس', path: '/', tab: 'home', priority: '1.0', changefreq: 'daily' },
-    { title: 'بازارچه گل و گیاه آنلاین', path: '/marketplace', tab: 'marketplace', priority: '0.9', changefreq: 'hourly' },
+    { title: 'فروشگاه گل و گیاه آنلاین', path: '/marketplace', tab: 'marketplace', priority: '0.9', changefreq: 'hourly' },
     { title: 'صنایع دستی، سفال لالجین و گلدان‌ها', path: '/handicrafts', tab: 'handicrafts', priority: '0.9', changefreq: 'daily' },
     { title: 'داستان دختر گل و درباره ما', path: '/about', tab: 'about', priority: '0.8', changefreq: 'monthly' },
     { title: 'مجله و آموزش نگهداری گل و گیاه', path: '/blog', tab: 'blog', priority: '0.8', changefreq: 'weekly' },
@@ -234,7 +234,7 @@ Sitemap: https://golarys.ir/sitemap.xml
               {/* Categories */}
               <div>
                 <h4 className="text-xs font-black text-stone-500 uppercase tracking-wider mb-3">
-                  دسته‌بندی‌های تخصصی بازارچه:
+                  دسته‌بندی‌های تخصصی فروشگاه:
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {siteContent.site.categories.map((c) => {

@@ -48,7 +48,7 @@ export const AboutView: React.FC = () => {
                   onClick={() => setActiveTab('marketplace')}
                   className="px-6 py-3 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all cursor-pointer"
                 >
-                  دیدن محصولات بازارچه
+                  دیدن محصولات فروشگاه
                 </button>
                 <button
                   onClick={() => setActiveTab('sellers')}

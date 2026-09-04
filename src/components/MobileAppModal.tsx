@@ -54,11 +54,11 @@ export const MobileAppModal: React.FC = () => {
           </button>
 
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-right relative z-10">
-            <div className="w-20 h-20 rounded-2xl bg-white p-2 shadow-xl border-2 border-[#D4AF37] shrink-0 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-2xl bg-[#032e1b] p-1.5 shadow-xl border-2 border-[#D4AF37] shrink-0 flex items-center justify-center overflow-hidden">
               <img 
-                src="/logo-gold.png" 
-                alt="لوگوی گل آریس" 
-                className="w-full h-full object-contain"
+                src="/logo-gold.png?v=20260904_2" 
+                alt="لوگوی رسمی گل آریس" 
+                className="w-full h-full object-contain filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
               />
             </div>
             <div className="space-y-1">
@@ -183,13 +183,13 @@ export const MobileAppModal: React.FC = () => {
                     نصب سریع و مستقیم نسخه اندروید سازگار با تمامی گوشی‌های سامسونگ، شیائومی و هواوی
                   </p>
                   <a
-                    href="/logo-512.png"
-                    download="Golarys-App.png"
-                    onClick={() => showToast('در حال آماده‌سازی و دانلود فایل برنامه...', 'info')}
+                    href="/golarys.apk"
+                    download="Golarys.apk"
+                    onClick={() => showToast('در حال دانلود مستقیم فایل نصبی اپلیکیشن گل آریس...', 'success')}
                     className="w-full py-2.5 bg-[#2D5A27] hover:bg-[#1F3F1B] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs"
                   >
                     <Download className="w-4 h-4" />
-                    <span>دریافت فایل نصبی APK</span>
+                    <span>دریافت فایل نصبی APK (نسخه اختصاصی)</span>
                   </a>
                 </div>
 

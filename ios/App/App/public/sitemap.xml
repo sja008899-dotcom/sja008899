@@ -1,98 +1,233 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
-  <!-- Main Landing Page -->
+<!-- Generated automatically by Golarys Sitemap Generator on 2026-09-04T10:15:09.416Z -->
   <url>
-    <loc>https://golarys.ir/</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://golarys.ir/logo-gold.png</image:loc>
-      <image:title>گل آریس - بازار آنلاین گل، گیاه و صنایع دستی</image:title>
-      <image:caption>خرید آنلاین گل شاخه بریده، گیاهان آپارتمانی و صنایع دستی سنتی لالجین و اصفهان</image:caption>
+      <image:loc>https://www.golarys.ir/logo-gold.png</image:loc>
+      <image:title>گل آریس | بازار آنلاین گل و گیاه و گلفروشی آنلاین ایران</image:title>
+      <image:caption>خرید آنلاین گل شاخه بریده، باکس گل رز هلندی، گیاهان آپارتمانی و گلدان‌های سرامیکی لالجین</image:caption>
     </image:image>
   </url>
 
-  <!-- Marketplace / Store -->
   <url>
-    <loc>https://golarys.ir/marketplace</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/marketplace</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Handicrafts & Artisan Pots -->
   <url>
-    <loc>https://golarys.ir/handicrafts</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <!-- Category: Roses -->
-  <url>
-    <loc>https://golarys.ir/category/roses</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/handicrafts</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Category: Houseplants -->
   <url>
-    <loc>https://golarys.ir/category/houseplants</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/category/roses</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Category: Orchids -->
   <url>
-    <loc>https://golarys.ir/category/orchids</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/category/orchids</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Category: Luxury Gift Baskets -->
   <url>
-    <loc>https://golarys.ir/category/gift-baskets</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/category/sunflowers</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Sellers / Florist Registration -->
   <url>
-    <loc>https://golarys.ir/sellers</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/category/houseplants</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/handicrafts</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/gift-baskets</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/seasonal</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/royal-red-rose-box</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/white-phalaenopsis-orchid</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/sunshine-meadow-bouquet</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/monstera-deliciosa-pot</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/deluxe-blossom-gift-box</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/pastel-peony-tulip-dream</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/zz-plant-black</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/peach-lily-rose-cluster</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/handmade-turquoise-ceramic-vase</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/double-macrame-plant-hanger</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/hand-engraved-copper-urn</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/palm-fiber-kapu-planter-basket</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/botanical-pressed-flower-resin-art</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/modern-hand-pinched-terracotta-pot</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/complete-guide-buying-flowers-online</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/how-to-keep-flowers-fresh</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/best-low-light-houseplants</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/category/flower-color-meanings</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/blog</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.golarys.ir/seller-registration</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.7</priority>
   </url>
 
-  <!-- About Us -->
   <url>
-    <loc>https://golarys.ir/about</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/about</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.6</priority>
   </url>
 
-  <!-- Flower Magazine / Blog -->
   <url>
-    <loc>https://golarys.ir/blog</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <!-- Contact Us -->
-  <url>
-    <loc>https://golarys.ir/contact</loc>
-    <lastmod>2026-08-16</lastmod>
+    <loc>https://www.golarys.ir/contact</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.6</priority>
   </url>
-
 </urlset>

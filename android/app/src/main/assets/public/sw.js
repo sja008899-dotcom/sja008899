@@ -84,39 +84,39 @@ define(['./workbox-7e5eb42b'], (function (workbox) { 'use strict';
     "revision": "1872c500de691dce40960bb85481de07"
   }, {
     "url": "logo-transparent.png",
-    "revision": "c5f560516d8a524788a43116f4c6b021"
+    "revision": "ad21aed1b5cd03a03a1c1d4dd2b69d1a"
   }, {
     "url": "logo-gold.png",
-    "revision": "4fc41d9752113976caa32983ffb90fb7"
+    "revision": "ad21aed1b5cd03a03a1c1d4dd2b69d1a"
   }, {
     "url": "logo-512.png",
-    "revision": "4fc41d9752113976caa32983ffb90fb7"
+    "revision": "ad21aed1b5cd03a03a1c1d4dd2b69d1a"
   }, {
     "url": "logo-192.png",
-    "revision": "e5544324471bf268179b00c4080a13de"
+    "revision": "3e0e43d399b51be624d2db551773b9b5"
   }, {
     "url": "index.html",
-    "revision": "815f3222de174e888ec2fa7039e7e769"
+    "revision": "d05fd56222acbdbf0ad33afd15ed600e"
   }, {
     "url": "google0431289f12df47e8.html",
     "revision": "975000054868f25195dde7b23d567f30"
   }, {
     "url": "golarys-play-store-icon-512.png",
-    "revision": "4fc41d9752113976caa32983ffb90fb7"
+    "revision": "ad21aed1b5cd03a03a1c1d4dd2b69d1a"
   }, {
     "url": "golarys-icon-transparent.png",
-    "revision": "c5f560516d8a524788a43116f4c6b021"
+    "revision": "f4e3fbf9fd3229774c590f4ab38ae5ab"
   }, {
     "url": "golarys-icon-1024.png",
-    "revision": "2b8efa78391e74208f2b6ce53b3f8b08"
+    "revision": "10ff0324a9ce10507b4b5214353f798f"
   }, {
     "url": "favicon.png",
-    "revision": "9a67d5de128aaa7d26eb1b2162f187df"
+    "revision": "33fcc3734a80688bd9b3c766373cf751"
   }, {
-    "url": "assets/index-Dnr_8uvX.js",
+    "url": "assets/index-CsW8W7oH.css",
     "revision": null
   }, {
-    "url": "assets/index-6cYLJojK.css",
+    "url": "assets/index-CcNmOO28.js",
     "revision": null
   }], {});
   workbox.cleanupOutdatedCaches();

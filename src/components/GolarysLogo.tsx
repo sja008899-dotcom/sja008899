@@ -50,19 +50,19 @@ export const GolarysLogo: React.FC<GolarysLogoProps> = ({
     >
       {/* Official Master Golarys Golden Iris Jewel Logo */}
       <div 
-        className={`relative shrink-0 flex items-center justify-center rounded-2xl bg-[#172E14] border border-[#D4AF37]/50 shadow-md shadow-[#172E14]/40 overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:border-[#D4AF37] p-1 ${imgSize}`}
+        className={`relative shrink-0 flex items-center justify-center rounded-2xl bg-[#032e1b] border border-[#D4AF37]/60 shadow-md shadow-[#032e1b]/50 overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:border-[#D4AF37] ${imgSize}`}
         style={{ width: `${px}px`, height: `${px}px` }}
       >
         <img
-          src="/logo-gold.png?v=20260904"
+          src="/logo-gold.png?v=20260904_2"
           alt="لوگوی رسمی گل آریس (Golarys)"
-          className="w-full h-full object-cover rounded-xl filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
+          className="w-full h-full object-contain filter drop-shadow-[0_2px_6px_rgba(212,175,55,0.3)]"
           loading="eager"
           decoding="sync"
           onError={(e) => {
             if (!imgError) {
               setImgError(true);
-              (e.target as HTMLImageElement).src = '/logo-512.png?v=20260904';
+              (e.target as HTMLImageElement).src = '/logo-512.png?v=20260904_2';
             }
           }}
         />

@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import path from "path";
+import fs from "fs";
 import axios from "axios";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
@@ -802,6 +803,18 @@ async function startServer() {
 
     res.header("Content-Type", "application/xml; charset=utf-8");
     res.send(xml);
+  });
+
+  // Direct APK Download route with Android MIME type
+  app.get(['/Golarys.apk', '/golarys.apk', '/download-apk'], (req: Request, res: Response) => {
+    const apkPublic = path.join(process.cwd(), 'public', 'Golarys.apk');
+    const apkDist = path.join(process.cwd(), 'dist', 'Golarys.apk');
+    const finalPath = fs.existsSync(apkPublic) ? apkPublic : apkDist;
+
+    res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+    res.setHeader('Content-Disposition', 'attachment; filename="Golarys.apk"');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendFile(finalPath);
   });
 
   // ==========================================
